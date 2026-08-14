@@ -16,7 +16,27 @@
             --font-serif: "Georgia", "Times New Roman", serif;
             --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
+/* --- BLOCKQUOTE STYLES --- */
+.article-text blockquote {
+    margin: 1.5rem 0;
+    padding: 1rem 1.25rem;
+    background-color: #121215;
+    border-left: 3px solid var(--red);
+    color: #b0b0b8;
+    font-style: italic;
+    border-radius: 0 4px 4px 0;
+}
 
+/* Optional styling if the quote has a source attribution */
+.article-text blockquote cite {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    font-style: normal;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
         * {
             box-sizing: border-box;
             margin: 0;
@@ -286,10 +306,11 @@
         }
 
         .article-text {
-            font-size: 0.95rem;
+            font-size: 0.79rem;
             line-height: 1.7;
             color: #d0d0d5;
             white-space: pre-line;
+            text-align: justify;
         }
 
         .article-text strong {
@@ -342,7 +363,7 @@
                 <article class="book-card" onclick="openModal('art-2')">
                     <div>
                         <div class="book-meta">Ethik 1</div>
-                        <h2 class="book-title">"Bioautentizismus"</h2>
+                        <h2 class="book-title">"Bioauthentizismus"</h2>
                         <div class="book-author">Khotin</div>
                         <p class="book-desc">Untersuchung der moralischen Basis vs. Superstruktur.</p>
                     </div>
@@ -360,143 +381,19 @@
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('art-1')">&times;</span>
             <div class="modal-body">
-                <div class="article-meta-tag">Ethik I — Analyse</div>
-                <h2>Bioauthentizismus</h2>
+                <div class="article-meta-tag">Ethik I — Antwort</div>
+                <h2>Antwort auf "Bioauthentizismus"</h2>
                 <div class="article-text">
 <strong>"BIOAUTHENTIZISMUS"</strong>
-Die Theorie beginnt mit der Annahme, dass Moral nicht etwas ist, das vollständig unabhängig vom menschlichen
-Organismus existiert. Moral ist keine rein abstrakte Struktur außerhalb des Menschen, sondern eine Eigenschaft
-biologischer Wesen mit bestimmten Gehirnen, Körpern, Emotionen und kognitiven Fähigkeiten. Sie entsteht aus dem
-Zusammenspiel zwischen der biologischen Grundlage eines Individuums, seiner Psychologie, seinen Erfahrungen,
-seiner kulturellen Umgebung und seiner bewussten Reflexion. Moral ist daher weder ausschließlich angeboren noch
-ausschließlich erlernt, sondern entsteht aus der Wechselwirkung zwischen Natur und Erfahrung.
-Die zentrale These dieser Theorie lautet: Eine moralische Überzeugung oder Handlung ist für ein Individuum dann
-moralisch richtig, wenn sie authentisch mit dessen eigener biologischer und psychologischer Moralstruktur
-übereinstimmt. Eine moralische Überzeugung ist für ein Individuum dann falsch, wenn sie nicht seiner tatsächlichen
-moralischen Struktur entspricht, sondern durch äußere Einflüsse, Manipulation, Ideologie, soziale Anpassung oder
-Selbsttäuschung entstanden ist. Dabei bedeutet „richtig“ nicht, dass diese Moral automatisch für alle Menschen
-universell gelten muss. Die Theorie unterscheidet zwischen universeller Moral und individueller Objektivität. Eine
-moralische Aussage kann objektiv für eine Person richtig oder falsch sein, ohne dass daraus folgt, dass sie für alle
-Menschen gleichermaßen gelten muss.
-Der Ausgangspunkt dieser Theorie ist eine Analogie zur menschlichen Sprache. Menschen werden nicht mit einer
-bestimmten Sprache geboren, aber sie besitzen biologische Voraussetzungen, die Sprache überhaupt ermöglichen. Die
-menschliche Biologie schafft bestimmte Grenzen und Möglichkeiten, während die Umwelt entscheidet, welche
-konkrete Sprache ein Mensch entwickelt. Ein Mensch wird nicht mit Deutsch oder Englisch geboren, aber er besitzt die
-Fähigkeit, eine Sprache zu erlernen. Moral funktioniert nach dieser Theorie ähnlich. Menschen werden nicht mit einem
-vollständigen moralischen System geboren, aber sie besitzen biologische Voraussetzungen für moralisches Empfinden
-und moralische Urteile. Diese Voraussetzungen umfassen unter anderem Empathie, emotionale Reaktionen auf Leid,
-soziale Bindungsfähigkeit, Fairnessinstinkte, Kooperationsbereitschaft, Aggressionsmechanismen und individuelle
-emotionale Veranlagungen.
-Diese biologischen Eigenschaften bilden die moralische Grundlage eines Menschen. Auf dieser Grundlage entwickelt
-sich eine moralische Superstruktur. Diese Superstruktur besteht aus kulturellen Werten, Religion, politischen
-Überzeugungen, philosophischen Ideen, Erziehung, sozialen Einflüssen und bewussten moralischen Entscheidungen.
-Die biologische Grundlage bestimmt nicht vollständig, welche moralischen Überzeugungen eine Person entwickelt,
-genauso wenig wie die biologische Sprachfähigkeit bestimmt, welche Sprache ein Mensch spricht. Sie schafft jedoch
-einen Rahmen, innerhalb dessen sich die individuelle Moral entwickelt.
-Die Beziehung zwischen biologischer Grundlage und moralischer Superstruktur ist daher entscheidend. Wenn die
-bewussten moralischen Überzeugungen einer Person mit ihrer tatsächlichen biologischen und psychologischen Struktur
-übereinstimmen, handelt die Person authentisch. Wenn die bewussten moralischen Überzeugungen jedoch nicht dieser
-Struktur entsprechen, sondern durch äußere Einflüsse oder Selbsttäuschung entstanden sind, handelt die Person
-unauthentisch. Daraus folgt, dass ein Mensch aufrichtig an eine moralische Aussage glauben kann und trotzdem falsch
-darüber liegen kann, ob diese Aussage tatsächlich seiner eigenen Moral entspricht.
-Dies führt zum Konzept der moralischen Falschbewusstheit. Eine Person kann durch Propaganda, soziale Erwartungen,
-Ideologien oder andere äußere Einflüsse moralische Überzeugungen übernehmen, die nicht ihrer eigenen tieferen
-moralischen Struktur entsprechen. Ein Beispiel wäre ein junger Mensch, der grundsätzlich Empathie besitzt, Gewalt
-ablehnt und intuitiv gegen unnötiges Leid eingestellt ist, aber durch extremistische Propaganda zu der Überzeugung
-gelangt, dass Genozid oder die Vernichtung bestimmter Menschengruppen moralisch richtig sei. Nach dieser Theorie ist
-diese Person moralisch falsch, nicht notwendigerweise deshalb, weil sie gegen ein universelles moralisches Gesetz
-verstößt, sondern weil ihre bewusste moralische Überzeugung nicht ihrer tatsächlichen moralischen Grundlage
-entspricht. Die Ideologie hat die eigene moralische Wahrnehmung verzerrt.
-Die Theorie behauptet daher, dass Moral objektiv sein kann, ohne universell zu sein. Klassischer moralischer Realismus
-behauptet, dass es objektive moralische Wahrheiten gibt, die unabhängig von einzelnen Menschen existieren und für
-alle gelten. Moralischer Relativismus behauptet dagegen, dass Moral vollständig von Kultur oder persönlicher Meinung
-abhängt. Bioauthentizismus nimmt eine Zwischenposition ein: Moralische Wahrheit existiert objektiv auf der Ebene des
-Individuums. Eine Person kann objektiv darüber falsch liegen, was ihre eigene moralische Natur tatsächlich ist. Eine
-hypothetische zukünftige Technologie könnte theoretisch die Beziehung zwischen den bewussten moralischen Aussagen
-einer Person und ihrer biologischen sowie neurologischen Struktur analysieren. Eine solche Maschine würde jedoch
-nicht entscheiden, welche Moral für alle Menschen gilt. Sie würde lediglich feststellen, ob die moralische
-Selbsteinschätzung einer Person mit ihrer tatsächlichen inneren Struktur übereinstimmt.
-Ein zentraler Bestandteil dieser Theorie ist daher die moralische Bedeutung von Authentizität. Es ist moralisch
-problematisch, moralische Überzeugungen zu vertreten, die nicht wirklich die eigene moralische Struktur
-widerspiegeln. Ein Mensch hat eine Verantwortung, sich selbst zu verstehen und seine bewussten Werte mit seiner
-tatsächlichen Natur in Einklang zu bringen. Moralische Integrität bedeutet deshalb, dass zwischen dem, was eine Person
-behauptet zu glauben, und dem, was tatsächlich ihre moralische Struktur ausmacht, eine Übereinstimmung besteht.
-Dies bedeutet jedoch nicht, dass alle authentischen Moralvorstellungen miteinander vereinbar sind. Unterschiedliche
-Menschen können aufgrund unterschiedlicher biologischer und psychologischer Strukturen unterschiedliche
-authentische Moralvorstellungen entwickeln. Moralische Konflikte entstehen daher nicht immer dadurch, dass eine
-Seite die Wahrheit erkannt hat und die andere Seite unwissend oder unehrlich ist. Manchmal stehen sich zwei
-tatsächlich unterschiedliche moralische Systeme gegenüber.
-Der Fall Jeffrey Dahmer stellt dabei eine der schwierigsten Herausforderungen für diese Theorie dar. Angenommen,
-eine Person wie Dahmer hätte tatsächlich eine biologische und psychologische Struktur, in der Mord und extreme
-Gewalt authentisch mit seinen inneren Neigungen übereinstimmen. Nach dieser Theorie könnte man sagen, dass sein
-Verhalten für ihn authentisch war. Daraus folgt jedoch nicht, dass andere Menschen verpflichtet wären, dieses Verhalten
-zu akzeptieren. Eine Person, deren eigene moralische Struktur stark auf Empathie, Solidarität, Schutz anderer Menschen
-und Verhinderung von Leid ausgerichtet ist, kann ebenso authentisch dazu motiviert sein, Dahmer aufzuhalten.
-Damit können zwei Aussagen gleichzeitig wahr sein: Dahmer kann entsprechend seiner eigenen authentischen Moral
-handeln, und eine andere Person kann entsprechend ihrer eigenen authentischen Moral handeln, indem sie ihn stoppt.
-Der Konflikt besteht dann nicht notwendigerweise zwischen einer moralischen und einer unmoralischen Person,
-sondern zwischen zwei inkompatiblen moralischen Strukturen. Authentizität bedeutet nicht, dass andere Menschen die
-Handlungen einer Person akzeptieren müssen. Sie beschreibt lediglich, ob eine Handlung tatsächlich aus der eigenen
-moralischen Struktur hervorgeht.
-Dasselbe Prinzip gilt für politische und ideologische Konflikte. Wenn eine Person tatsächlich eine faschistische
-Weltanschauung besitzt und diese vollständig ihrer biologischen und psychologischen Struktur entspricht, dann kann
-diese Überzeugung authentisch sein. Trotzdem kann eine andere Person, deren eigene authentische Moral
-antifaschistisch ist, weiterhin moralisch gerechtfertigt sein, diese Person und diese Ideologie zu bekämpfen. Der
-Antifaschist muss nicht behaupten, dass der Faschist eigentlich kein echter Faschist sei. Er kann anerkennen, dass die
-Überzeugung echt ist, und sie trotzdem ablehnen, weil die Ablehnung des Faschismus Teil seiner eigenen authentischen
-Moral ist.
-Dies zeigt den Unterschied zwischen Verstehen und Akzeptieren. Eine Person kann verstehen, dass eine andere Person
-authentisch handelt, ohne diese Handlung gutzuheißen. Das Erkennen der Authentizität einer fremden Moral bedeutet
-nicht, dass man diese Moral übernehmen oder tolerieren muss.
-Die Theorie trennt daher zwei Fragen, die in vielen ethischen Systemen vermischt werden. Die erste Frage lautet: Ist
-eine moralische Überzeugung authentisch für die Person, die sie besitzt? Die zweite Frage lautet: Unterstütze oder lehne
-ich diese moralische Überzeugung aufgrund meiner eigenen authentischen Moral ab? Ein Mensch kann erkennen, dass
-eine andere Person wirklich so denkt, und trotzdem moralisch verpflichtet sein, dieser Person entgegenzutreten.
-Zusammenfassend behauptet Bioauthentizismus, dass Menschen biologische Wesen sind, deren moralische Fähigkeiten
-aus ihrer biologischen und psychologischen Struktur entstehen. Diese Struktur bildet die Grundlage der Moral, während
-Kultur, Erfahrung und bewusste Reflexion eine moralische Superstruktur bilden. Diese Superstruktur kann entweder die
-eigene biologische Grundlage ausdrücken oder sie verzerren. Authentische moralische Überzeugungen sind diejenigen,
-die tatsächlich der eigenen moralischen Struktur entsprechen. Inauthentische moralische Überzeugungen entstehen,
-wenn eine Person von ihrer eigenen moralischen Grundlage entfremdet wird.
-Moral ist nach dieser Theorie weder ein äußerer Befehl, der allen Menschen von außen auferlegt wird, noch eine
-vollkommen subjektive Meinung ohne objektive Grundlage. Moral ist eine objektive Eigenschaft biologischer
-Individuen, die aus dem Zusammenspiel von biologischer Natur, persönlicher Erfahrung und bewusster Selbstreflexion
-entsteht.
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="art-2" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('art-2')">&times;</span>
-            <div class="modal-body">
-                <div class="article-meta-tag">Test für Artikel 2</div>
-                <h2>Replik & Analyse</h2>
-                <div class="article-text">
-<strong>"Titel"</strong>
-Matti Meincke											    23.07.2026
+Khotin
+23.07.2026
 MaterialSichtung Verlag
 Pazifistische Gruppe
 
-
-
-
-
-
-
-
-
-
-
-Antwort:
-
 1.
 Zuerst werde ich auf die Fragen am Anfang in Reihenfolge eingehen:
-
-Wie unterscheidet sich moralische Basis und Superstruktur wesentlich voneinander?
-Der Unterschied liegt in den materiellen Eigenschaften der Fähigkeiten. Diese sind biologisch.
-
+<blockquote>Wie unterscheidet sich moralische Basis und Superstruktur wesentlich voneinander? Der Unterschied liegt in den materiellen Eigenschaften der Fähigkeite. Diese sind biologisch.
+</blockquote>
 1.1 Empathie
 Wie in dem Dokument erklärt gehören hierzu: „Empathie, emotionale Reaktionen auf Leid, soziale Bindungsfähigkeit, Fairnessinstinkte, Kooperationsbereitschaft, Aggressionsmechanismen und individuelle emotionale Veranlagungen“. Diese lassen sich biologisch und neurowissenschaftlich begründen [1]. Hierzu eine Studie von M. Schlegel: „Die Neurowissenschaft entdeckte vor ein paar Jahren, dass Spiegelneuronen nicht nur bei Affen, sondern auch beim Menschen vorkommen, andere Untersuchungen beschäftigen sich mit der Frage, ob Empathie trainiert werden kann, indem die Plastizität des Gehirns in diesem Zusammenhang untersucht wird“[1:90]. Diese Spiegelneuronen scheinen viel mit der biologischen Konstruktion von Empathie im Menschen zu tun zu haben. Das ist aber keine eindeutige Erkenntnis1 [2:5]. Wenn die Neurowissenschaft aber empirisch beweisen könnte, das diese Spiegelneuronen tatsächlich maßgebend für Empathiefähigkeit verantwortlich sind, kann man Empathie aus der Basis ableiten. Moralische Intuition, die auf Empathie aufbaut, würde somit auf der Basis aufbauen, da die Spiegelneuronen nicht gelernt sind, sondern intrinsisch existieren. Bestimmte neurowissenschaftliche Theorien (auf die ich gleich eingehe) sehen die Spiegelneuronen als „[…] die physiologische Essenz der Empathie und Mitmenschlichkeit dar [...]“ [2:15]. Diese Theorie nennt sich „Spiegelneuronen-Theorie“ (SN-Theorie) [vgl. 2:15]. Bzgl. der Funktion dieser Neuronen, die beim Menschen nachgewiesen wurden: „The intriguing feature of many mirror neurons is that they fire not only when the animal is performing an action, such as grasping an object using a power grip, but also when the animal passively observes a similar action performed by another agent. It is widely believed that mirror neurons are a genetic adaptation for action understanding; that they were designed by evolution to fulfill a specific socio-cognitive function“ [3]. Also es gibt Neuronen beim Menschen, die feuern wenn sie passiv eine Aktion bei einer anderen Person wahrnehmen, gegeben das sie diese Aktion durch das eigene Handeln nachvollziehen können [vgl. 3]. Das erschafft noch keine Meinung zu der Aktion (ist diese Aktion richtig oder falsch?), aber es ist Teil der Basis für die emotionale Wahrnehmung der Aktion. Dieser Prozess ist Teil der Basis, weil er (1) Konsensfrei durch den Körper durchgeführt wird, (2) Ein passiver Teil der menschlichen Wahrnehmung ist, (3) unabhängig von der Superstruktur seine Wirkung findet. Genauer: „According to the most detailed early study […] mirror neurons comprised 17% of sampled cells in the portion of F5 that was examined, and exhibit the following properties. The cells were activated when the monkey observed hand and/or mouth movements that were directed toward objects (“goal-directed” actions)“ [4]. Also die emotionale Wahrnehmung davon welche Ziel ein Affe hat wenn er mit einem Objekt interagiert ist biologisch [vgl. 4]. Da diese Neuronen auch im Menschen gefunden wurden kann man die Theorie aufstellen, dass die menschliche, emotionale Wahrnehmung von anderen Menschen wie sie mit Objekten umgehen Teil der Basis ist. Diese Neuronen wurden in der Wissenschaft zur Sensation gemacht, weil sie angeblich alles am menschlichen Verhalten erklären könnte [5]. Wir wissen inzwischen, dass sie das nicht erklären können [6]. Es würde auch gegen meine kompatibilistisch These sprechen, wenn sie das tun würden2. Meine These ist, dass Dinge wie die Spiegelneuronen die Basis legen, und alles was sie nicht erklären können ist Teil der Superstruktur. Die Spiegelneuronen sagen nur, wie die emotionale Wahrnehmung von Objekt-gerichteten Aktionen funktioniert in der Wahrnehmung des Zuschauers, aber sie erklärt auch nicht mehr. Das liegt daran, so meine These, dass der Rest in der Superstruktur liegt. Mit dieser These stimme ich also einerseits die Sozialbiologie und andererseits sozialwissenschaftliche Ideen nicht zu. Idee von A. Medics (2018) aus der Neurobiologie sind hier angebrachter: „Die menschliche Empathie ist ein psychologisches Konstrukt, welches sowohl aus kognitiven, als auch aus emotionalen Komponenten zusammengesetzt ist (Shamay-Tsoory 2011). Eine beeinträchtigte Empathie ist ein zentrales Merkmal von verschiedenen neurologischen und psychiatrischen Erkrankungen, wie etwa der frontotemporalen Degeneration (Rankin et al. 2005, Rankin et al. 2006), Autismus, der Borderline-Persönlichkeitsstörung (Dziobek et al. 2008) und Schizophrenie (Lee et al. 2011)“ [7:14]. Diese Theorie geht davon aus, dass die Empathie ein Konstrukt ist, dass psychologisch begründet ist [vgl. 7:14]. „Studien haben sich weiterhin mit der Frage auseinandergesetzt ob die Empathie auf geteilten neurologischen Netzwerken für das eigene und das stellvertretende Erleben von Gefühlen beruht, und ob empathische Reaktionen mehr von Bottom-Up-, oder von Top-Down-Prozessen gesteuert werden. Interessant sind auch Untersuchungen der Relevanz von verschiedenen Hormonen wie Oxytocin, Arginin-Vasopressin, Opiaten oder Testosteron. Gemeinsam mit der Entwicklungspsychologie und –biologie beleuchtet die Neurobiologie inzwischen auch die ontogenetische Entwicklung der Empathie, wobei das Phänomen hierbei in verschiedene Teile zergliedert werden muss, da diese jeweils unterschiedliche Entwicklungsgeschwindigkeiten aufweisen“ [7:3]. Klar kann man also nichts beweisen, aber die Hypothese der Moralbasis lässt sich so ableiten.
 Ich komme jetzt zu der Linguistik.
@@ -504,38 +401,38 @@ Ich komme jetzt zu der Linguistik.
 1.2 Linguistik
 Es gibt neurolinguistische Gründe, weshalb manche Menschen eher diskriminierende Beleidigungen benutzen und andere eher Beleidigungen auf Basis der Fähigkeit eines Menschen. Diese Erkenntnisse sind in ihrem Kern linguistisch, werden aber auch von der Psychologie aufgegriffen und sind so auch in die Pop-Psychologie gekommen. So z. B. der DF: „Menschen neigen zu Stereotypen und Schubladendenken. Und das wahrscheinlich nicht nur durch Sozialisation, sondern auch aufgrund der Funktionsweise unserer Gehirne. Wie lassen sich unsere kognitiven Denkschablonen besser verstehen“ [8]? Die Erklärung hierfür kommt anscheinend aus der Neuropolitik [8]. Die Beispiele die der Artikel nennt sind jetzt alle ein bisschen Arsch aber sie schreiben sowas wie: „Unser Gehirn sortiert in sogenannte Ingroups und Outgroups, also in die eigene Gruppe und die fremde Gruppe. Das zeigen beispielsweise Experimente mit Babys. Schon diese können Angehörige der eigenen Hautfarbe besser erkennen als die einer anderen Hautfarbe“ [8]. Und: „Doch wir unterscheiden nicht nur zwischen der eigenen Gruppe und fremden Gruppen, unsere Empathie scheint auch davon abhängig zu sein. Das haben Studien gezeigt, in der den Probanden Menschen in schmerzvollen Situationen gezeigt wurden. Das Ergebnis: Gehört der oder die Betroffene zur eigenen Gruppe, dann springen nicht nur Regionen im Gehirn an, die für Empathie zuständig sind, sondern auch die, die uns zum Handeln bewegen, vielleicht zum Helfen bringen“ [8]. Jetzt gilt es zu beweisen, das dass biologisch vorgegeben ist, also ungelernt bereits vorhanden ist, und nachträglich nur noch durch die Superstruktur konkretisiert wird. Hier hab ich ziemlich gewonnen, weil man unkontrovers nachweisen kann, das dass so ist [8-20]. Also sind Menschen biologisch konsenslos, intrinsisch und ohne Erfahrung die zuvor kommen musste darauf ausgelegt diskriminierend zu Denken [8-20]. Ob sie das am Ende tun oder ob sie es nicht tun ist dann eine Sache der Superstruktur. Die intrinsische Verlangung der Basis bleibt aber da. Machen wir es konkreter: die Beleidigung „dumm“ lässt sich neurolinguistisch und psycholinguistisch erklären durch kognitive Ökonomie, das was ich eben mit Diskriminierung angesprochen habe, und durch die evolutionäre Psychologie. Die kognitive Ökonomie diktiert, das nicht zu viel Aufwand auf ein Thema aufgebracht werden darf. Somit wird der Gegenstand als dumm abgewertet. Etwas als dumm abzuwerten hat mehr mit der kognitiven Ökonomie zu tun als mit der erfahrungsbasiernden Abwertung nach moralischem Maßstab (dumm = schlecht oder zumindest nicht-gut). Die kognitive Ökonomie ist teil der Basis.
 
-An welchem Punkt ist es nicht mehr die Basis, sondern die Superstruktur?
+<blockquote>An welchem Punkt ist es nicht mehr die Basis, sondern die Superstruktur?
+</blockquote>
 Ich denke die Frage sollte beantwortet sein dadurch das ich sage: (1) Konsensfrei durch den Körper durchgeführt, (2) Ein passiver Teil der die menschlichen Wahrnehmung beeinflusst (3) unabhängig von der Superstruktur seine Wirkung findet.
-Bildet sich die moralische Basis rein instinktiv, ohne äußere Einflüsse?
+<blockquote>Bildet sich die moralische Basis rein instinktiv, ohne äußere Einflüsse?</blockquote>
 Die Frage setzt eine falsche Prämisse. Die Basis „bildet“ sich nicht, und sie ist auch nicht unbedingt instinktiv. Das sie sich ohne äußere Einflüsse bildet ist Teil ihrer Definition. Die Basis ist intrinsisch (angeboren), baut nicht nur auf Instinkten, sondern auf allem evolutionären.
-Kann sie dann konkret sein?
+<blokckquote>Kann sie dann konkret sein?</blokckquote>
 Ja.
-Wenn grundsätzliche psychologische Anlagen auch als Moral bezeichnet werden, wie definierst du dann Moral?
+<blockquote>Wenn grundsätzliche psychologische Anlagen auch als Moral bezeichnet werden, wie definierst du dann Moral?</blockquote>
 Ich habe nicht gesagt, dass grundlegende psychologische Anlagen als Moral zu bezeichnen sind. Ich sage, dass die Moral sich abhängig von ihr konstituiert. Moral wäre die Gesamtstruktur. Der Gegenstand Basis-Superstruktur als ein handelnder Körper und Subjekt zugleich ist der Gegenstand der Moral. Dieser bedingt sich dialektisch durch sein Objekt, das zu bewertende Geschehen, der in der Wahrnehmung stehende Gegenstand. Soviel zu den ersten Fragen.
 2.
 Diese Antworten sollten die Nachfragen beseitigen. Alles was darüber hinausgeht aus der zweiten Nachricht wird hier beantwortet:
 
-angeboren=instinktiv. Instinkte bilden sich nicht, die sind da.
+<blockquote>angeboren=instinktiv. Instinkte bilden sich nicht, die sind da.</blockquote>
 Halluzinierte Annahme.
-4) Mit Konkret meine ich: ein Arbeiter darf nicht von einem Kapitalisten ausgebeutet werden; oder: Ausbeutung ist falsch. Wenn Moral angeboren ist, dann müssten Menschen in urgesellschaften die selben Urteile Fällen wie Menschen im Kapitalismus.
+<blokquote>4) Mit Konkret meine ich: ein Arbeiter darf nicht von einem Kapitalisten ausgebeutet werden; oder: Ausbeutung ist falsch. Wenn Moral angeboren ist, dann müssten Menschen in urgesellschaften die selben Urteile Fällen wie Menschen im Kapitalismus.</blokquote>
 Wenn Moral angeboren wäre, dann ja. Aber das stimmt nicht und deshalb ist das auch nicht das Argument.
-Es sei denn 5) du meinst mit Moral etwas völlig anderes, als ich darunter verstehe. Du hast in deinem Text nicht beschrieben, was du unter Moral verstehst. Deshalb bitte ich dich, einmal Moral zu definieren, sonst kann kein Austausch stattfinden.
+<blockquote>Es sei denn 5) du meinst mit Moral etwas völlig anderes, als ich darunter verstehe. Du hast in deinem Text nicht beschrieben, was du unter Moral verstehst. Deshalb bitte ich dich, einmal Moral zu definieren, sonst kann kein Austausch stattfinden.</blockquote>
 Der Gegenstand Basis-Superstruktur als ein handelnder Körper und Subjekt zugleich ist der Gegenstand der Moral. Dieser bedingt sich dialektisch durch sein Objekt, das zu bewertende Geschehen, der in der Wahrnehmung stehende Gegenstand.
-Du versuchst aus meiner Sicht mit deinem Konzept mit Umwegen eine Ideenwelt zu rechtfertigen.
+<blockquote>Du versuchst aus meiner Sicht mit deinem Konzept mit Umwegen eine Ideenwelt zu rechtfertigen.</blockquote>
 Nein.
-Bitte beantworte die Fragen nochmal präziser, sonst weiß ich wirklich bei aller Freundschaft nicht, wo du herkommst. Deine Ausarbeitung lässt sehr viele Fragen offen und kann vielfach ausgelegt werden. Bitte präzisiere die Objekte deiner Betrachtung!
-Soviel zu diesem Absatz.
 
 3.
 In diesem Abschnitt gehe ich auf die Texte ein:
 
-Werte wie "man darf nicht töten" können nicht angeboren sein. Ein Gehirn kann von selbst kein Verständnis davon haben, was Mord bedeutet.
+<blockquote>Werte wie "man darf nicht töten" können nicht angeboren sein. Ein Gehirn kann von selbst kein Verständnis davon haben, was Mord bedeutet.</blockquote>
+
 Doch. Das ist nicht nur möglich, das ist auch so. Gefahrenwahrnehmung ist z. B. angeboren. Ein Kind braucht keine Erfahrungen um Angst zu haben. Neugeborene Kinder haben bereits Angstzustände. Wenn sie keine Fähigkeit für Schaden hätten, dann könnten sie keine Angst nach der Geburt verspüren. Angeboren sind: Reflexe, Höhenangst und Annäherungsängste. Die Angst die ein Kind direkt nach der Geburt verspürt ist Teils durch die Erfahrung und Teils angeboren [21]. Wir können nur wenig sagen darüber weil das Thema sehr schlecht studiert ist. Nur eine Studie [21] redet wirklich darüber. Du kannst diese These also nicht beweisen. Die eine wirkliche Studie die es dazu gibt sagt, es gibt bereits angeborene Ängste die unabhängig von Erfahrung sind. Diese spielen eine Rolle für die Superstruktur. Somit gibt es bei dem Thema Mord (physischer Schaden am Körper) eine Basis, die Teils in der Angst liegt. Mehr muss ich nach meinem Argument auch nicht beweisen. Die Basis kann auch klein sein.
-Ein Gehirn kann Ängste vor dem Tod vermitteln, oder Verlusterfahrungen. Aber die moralische Verurteilung des Mordens kann keine biologische Ausgangslage sein. Wie würdest du das evolutionär erklären? Glaubst du wirklich, ein Mensch der in völliger Isolation von der Gesellschaft aufwächst würde die selben konkreten ethischen Vorstellungen haben wie du und ich, ohne die Welt und das zwischenmenschliche und Sprache zu kennen?
+<blockquote>Ein Gehirn kann Ängste vor dem Tod vermitteln, oder Verlusterfahrungen. Aber die moralische Verurteilung des Mordens kann keine biologische Ausgangslage sein. Wie würdest du das evolutionär erklären? Glaubst du wirklich, ein Mensch der in völliger Isolation von der Gesellschaft aufwächst würde die selben konkreten ethischen Vorstellungen haben wie du und ich, ohne die Welt und das zwischenmenschliche und Sprache zu kennen?</blockquote>
 Hier ist wieder eine komplette Halluzination von meinem Argument. Du verwechselst meine Position mit der Position der Sozialbiologie, die ich Oben erwähnt habe. Deine Aussage hat nichts mit meiner Position zu tun. Ich habe davon gesprochen, dass Moral durch die Basis gehen muss und das die Basis sie beeinflusst. Du scheinst die Superstruktur komplett ignoriert zu haben. Wenn man die Superstruktur vollständig ignoriert, obwohl sie ein wesentlicher Bestandteil meines Argumentes der Moralbildung ist, dann würde die Kritik stimmen.
-Moral ist Idee und Gesellschaftliches Verhältnis. Das Gehirn selbst kann sie nicht allein erzeugen.
+<blockquote>Moral ist Idee und Gesellschaftliches Verhältnis. Das Gehirn selbst kann sie nicht allein erzeugen.</blockquote>
 Ab dieser Aussage wird deine Argumentation Pathologisch, da du die Halluzinationen wiederholst und ausweitest. Das Bewusstsein der Moral das ich beschriebe steht in Verbindung zu dem Objekt, welches durch die Basis UND die Superstruktur wahrgenommen wird. Wenn wir davon ausgehen, dass das Bewusstsein eines Menschen im Gehirn stattfindet, wie ich für wahrscheinlich halte, dann findet die Moral nur3 im Gehirn statt. Egal welche Ethik-Theorie wir verwenden, hat das nichts damit zu tun. Nach dir ist Moral „Idee“ und „Gesellschaft“. Das sind genau die Elemente die ich in die Superstruktur verordne.
-Du versuchst aus meiner Sicht mit deinem Konzept mit Umwegen eine Ideenwelt zu rechtfertigen.
+<blockquote>Du versuchst aus meiner Sicht mit deinem Konzept mit Umwegen eine Ideenwelt zu rechtfertigen.</blockquote>
 Diese Aussage hat für mich keinen Inhalt. Was soll das heißen?
 ___________________________
 
@@ -569,7 +466,18 @@ Angeborenheit der Angst
 
 [21] Thomas, E., Buss, C., Rasmussen, J. M., Entringer, S., Ramirez, J. S. B., Marr, M., & Wadhwa, P. D. (2018). Newborn amygdala connectivity and early emerging fear. Developmental Cognitive Neuroscience, 34, 100604. https://doi.org/10.1016/j.dcn.2018.07.001.
 
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div id="art-2" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('art-2')">&times;</span>
+            <div class="modal-body">
+                <div class="article-meta-tag">"Bioauthentizismus" Theorie</div>
+                <div class="article-text">
+Die Theorie beginnt mit der Annahme, dass Moral nicht etwas ist, das vollständig unabhängig vom menschlichen Organismus existiert. Moral ist keine rein abstrakte Struktur außerhalb des Menschen, sondern eine Eigenschaft biologischer Wesen mit bestimmten Gehirnen, Körpern, Emotionen und kognitiven Fähigkeiten. Sie entsteht aus dem Zusammenspiel zwischen der biologischen Grundlage eines Individuums, seiner Psychologie, seinen Erfahrungen, seiner kulturellen Umgebung und seiner bewussten Reflexion. Moral ist daher weder ausschließlich angeboren noch ausschließlich erlernt, sondern entsteht aus der Wechselwirkung zwischen Natur und Erfahrung. Die zentrale These dieser Theorie lautet: Eine moralische Überzeugung oder Handlung ist für ein Individuum dann moralisch richtig, wenn sie authentisch mit dessen eigener biologischer und psychologischer Moralstruktur übereinstimmt. Eine moralische Überzeugung ist für ein Individuum dann falsch, wenn sie nicht seiner tatsächlichen moralischen Struktur entspricht, sondern durch äußere Einflüsse, Manipulation, Ideologie, soziale Anpassung oder Selbsttäuschung entstanden ist. Dabei bedeutet „richtig“ nicht, dass diese Moral automatisch für alle Menschen universell gelten muss. Die Theorie unterscheidet zwischen universeller Moral und individueller Objektivität. Eine moralische Aussage kann objektiv für eine Person richtig oder falsch sein, ohne dass daraus folgt, dass sie für alle Menschen gleichermaßen gelten muss. Der Ausgangspunkt dieser Theorie ist eine Analogie zur menschlichen Sprache. Menschen werden nicht mit einer bestimmten Sprache geboren, aber sie besitzen biologische Voraussetzungen, die Sprache überhaupt ermöglichen. Die menschliche Biologie schafft bestimmte Grenzen und Möglichkeiten, während die Umwelt entscheidet, welche konkrete Sprache ein Mensch entwickelt. Ein Mensch wird nicht mit Deutsch oder Englisch geboren, aber er besitzt die Fähigkeit, eine Sprache zu erlernen. Moral funktioniert nach dieser Theorie ähnlich. Menschen werden nicht mit einem vollständigen moralischen System geboren, aber sie besitzen biologische Voraussetzungen für moralisches Empfinden und moralische Urteile. Diese Voraussetzungen umfassen unter anderem Empathie, emotionale Reaktionen auf Leid, soziale Bindungsfähigkeit, Fairnessinstinkte, Kooperationsbereitschaft, Aggressionsmechanismen und individuelle emotionale Veranlagungen. Diese biologischen Eigenschaften bilden die moralische Grundlage eines Menschen. Auf dieser Grundlage entwickelt sich eine moralische Superstruktur. Diese Superstruktur besteht aus kulturellen Werten, Religion, politischen Überzeugungen, philosophischen Ideen, Erziehung, sozialen Einflüssen und bewussten moralischen Entscheidungen. Die biologische Grundlage bestimmt nicht vollständig, welche moralischen Überzeugungen eine Person entwickelt, genauso wenig wie die biologische Sprachfähigkeit bestimmt, welche Sprache ein Mensch spricht. Sie schafft jedoch einen Rahmen, innerhalb dessen sich die individuelle Moral entwickelt. Die Beziehung zwischen biologischer Grundlage und moralischer Superstruktur ist daher entscheidend. Wenn die bewussten moralischen Überzeugungen einer Person mit ihrer tatsächlichen biologischen und psychologischen Struktur übereinstimmen, handelt die Person authentisch. Wenn die bewussten moralischen Überzeugungen jedoch nicht dieser Struktur entsprechen, sondern durch äußere Einflüsse oder Selbsttäuschung entstanden sind, handelt die Person unauthentisch. Daraus folgt, dass ein Mensch aufrichtig an eine moralische Aussage glauben kann und trotzdem falsch darüber liegen kann, ob diese Aussage tatsächlich seiner eigenen Moral entspricht. Dies führt zum Konzept der moralischen Falschbewusstheit. Eine Person kann durch Propaganda, soziale Erwartungen, Ideologien oder andere äußere Einflüsse moralische Überzeugungen übernehmen, die nicht ihrer eigenen tieferen moralischen Struktur entsprechen. Ein Beispiel wäre ein junger Mensch, der grundsätzlich Empathie besitzt, Gewalt ablehnt und intuitiv gegen unnötiges Leid eingestellt ist, aber durch extremistische Propaganda zu der Überzeugung gelangt, dass Genozid oder die Vernichtung bestimmter Menschengruppen moralisch richtig sei. Nach dieser Theorie ist diese Person moralisch falsch, nicht notwendigerweise deshalb, weil sie gegen ein universelles moralisches Gesetz verstößt, sondern weil ihre bewusste moralische Überzeugung nicht ihrer tatsächlichen moralischen Grundlage entspricht. Die Ideologie hat die eigene moralische Wahrnehmung verzerrt. Die Theorie behauptet daher, dass Moral objektiv sein kann, ohne universell zu sein. Klassischer moralischer Realismus behauptet, dass es objektive moralische Wahrheiten gibt, die unabhängig von einzelnen Menschen existieren und für alle gelten. Moralischer Relativismus behauptet dagegen, dass Moral vollständig von Kultur oder persönlicher Meinung abhängt. Bioauthentizismus nimmt eine Zwischenposition ein: Moralische Wahrheit existiert objektiv auf der Ebene des Individuums. Eine Person kann objektiv darüber falsch liegen, was ihre eigene moralische Natur tatsächlich ist. Eine hypothetische zukünftige Technologie könnte theoretisch die Beziehung zwischen den bewussten moralischen Aussagen einer Person und ihrer biologischen sowie neurologischen Struktur analysieren. Eine solche Maschine würde jedoch nicht entscheiden, welche Moral für alle Menschen gilt. Sie würde lediglich feststellen, ob die moralische Selbsteinschätzung einer Person mit ihrer tatsächlichen inneren Struktur übereinstimmt. Ein zentraler Bestandteil dieser Theorie ist daher die moralische Bedeutung von Authentizität. Es ist moralisch problematisch, moralische Überzeugungen zu vertreten, die nicht wirklich die eigene moralische Struktur widerspiegeln. Ein Mensch hat eine Verantwortung, sich selbst zu verstehen und seine bewussten Werte mit seiner tatsächlichen Natur in Einklang zu bringen. Moralische Integrität bedeutet deshalb, dass zwischen dem, was eine Person behauptet zu glauben, und dem, was tatsächlich ihre moralische Struktur ausmacht, eine Übereinstimmung besteht. Dies bedeutet jedoch nicht, dass alle authentischen Moralvorstellungen miteinander vereinbar sind. Unterschiedliche Menschen können aufgrund unterschiedlicher biologischer und psychologischer Strukturen unterschiedliche authentische Moralvorstellungen entwickeln. Moralische Konflikte entstehen daher nicht immer dadurch, dass eine Seite die Wahrheit erkannt hat und die andere Seite unwissend oder unehrlich ist. Manchmal stehen sich zwei tatsächlich unterschiedliche moralische Systeme gegenüber. Der Fall Jeffrey Dahmer stellt dabei eine der schwierigsten Herausforderungen für diese Theorie dar. Angenommen, eine Person wie Dahmer hätte tatsächlich eine biologische und psychologische Struktur, in der Mord und extreme Gewalt authentisch mit seinen inneren Neigungen übereinstimmen. Nach dieser Theorie könnte man sagen, dass sein Verhalten für ihn authentisch war. Daraus folgt jedoch nicht, dass andere Menschen verpflichtet wären, dieses Verhalten zu akzeptieren. Eine Person, deren eigene moralische Struktur stark auf Empathie, Solidarität, Schutz anderer Menschen und Verhinderung von Leid ausgerichtet ist, kann ebenso authentisch dazu motiviert sein, Dahmer aufzuhalten. Damit können zwei Aussagen gleichzeitig wahr sein: Dahmer kann entsprechend seiner eigenen authentischen Moral handeln, und eine andere Person kann entsprechend ihrer eigenen authentischen Moral handeln, indem sie ihn stoppt. Der Konflikt besteht dann nicht notwendigerweise zwischen einer moralischen und einer unmoralischen Person, sondern zwischen zwei inkompatiblen moralischen Strukturen. Authentizität bedeutet nicht, dass andere Menschen die Handlungen einer Person akzeptieren müssen. Sie beschreibt lediglich, ob eine Handlung tatsächlich aus der eigenen moralischen Struktur hervorgeht. Dasselbe Prinzip gilt für politische und ideologische Konflikte. Wenn eine Person tatsächlich eine faschistische Weltanschauung besitzt und diese vollständig ihrer biologischen und psychologischen Struktur entspricht, dann kann diese Überzeugung authentisch sein. Trotzdem kann eine andere Person, deren eigene authentische Moral antifaschistisch ist, weiterhin moralisch gerechtfertigt sein, diese Person und diese Ideologie zu bekämpfen. Der Antifaschist muss nicht behaupten, dass der Faschist eigentlich kein echter Faschist sei. Er kann anerkennen, dass die Überzeugung echt ist, und sie trotzdem ablehnen, weil die Ablehnung des Faschismus Teil seiner eigenen authentischen Moral ist. Dies zeigt den Unterschied zwischen Verstehen und Akzeptieren. Eine Person kann verstehen, dass eine andere Person authentisch handelt, ohne diese Handlung gutzuheißen. Das Erkennen der Authentizität einer fremden Moral bedeutet nicht, dass man diese Moral übernehmen oder tolerieren muss. Die Theorie trennt daher zwei Fragen, die in vielen ethischen Systemen vermischt werden. Die erste Frage lautet: Ist eine moralische Überzeugung authentisch für die Person, die sie besitzt? Die zweite Frage lautet: Unterstütze oder lehne ich diese moralische Überzeugung aufgrund meiner eigenen authentischen Moral ab? Ein Mensch kann erkennen, dass eine andere Person wirklich so denkt, und trotzdem moralisch verpflichtet sein, dieser Person entgegenzutreten. Zusammenfassend behauptet Bioauthentizismus, dass Menschen biologische Wesen sind, deren moralische Fähigkeiten aus ihrer biologischen und psychologischen Struktur entstehen. Diese Struktur bildet die Grundlage der Moral, während Kultur, Erfahrung und bewusste Reflexion eine moralische Superstruktur bilden. Diese Superstruktur kann entweder die eigene biologische Grundlage ausdrücken oder sie verzerren. Authentische moralische Überzeugungen sind diejenigen, die tatsächlich der eigenen moralischen Struktur entsprechen. Inauthentische moralische Überzeugungen entstehen, wenn eine Person von ihrer eigenen moralischen Grundlage entfremdet wird. Moral ist nach dieser Theorie weder ein äußerer Befehl, der allen Menschen von außen auferlegt wird, noch eine vollkommen subjektive Meinung ohne objektive Grundlage. Moral ist eine objektive Eigenschaft biologischer Individuen, die aus dem Zusammenspiel von biologischer Natur, persönlicher Erfahrung und bewusster Selbstreflexion entsteht.
 
 
                 </div>
