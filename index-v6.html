@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MaterialSichtung Verlag — Wissenschaftliche Publikationen</title>
+    <style>
+        /* --- CSS RESET & DARK MODE VARIABLES --- */
+        :root {
+            --red: #ff3333;
+            --bg: #0f0f11;
+            --card-bg: #18181c;
+            --text-main: #e6e6e8;
+            --text-muted: #9999a1;
+            --border: #2a2a30;
+            --font-serif: "Georgia", "Times New Roman", serif;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* --- SPLASH / LANDING SCREEN --- */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--bg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            cursor: pointer;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        .splash-logo {
+            font-family: var(--font-serif);
+            font-size: 8rem;
+            font-weight: 700;
+            color: var(--red);
+            letter-spacing: -0.05em;
+            line-height: 1;
+            user-select: none;
+            transition: transform 0.3s ease;
+        }
+
+        .splash-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .splash-subtitle {
+            font-family: var(--font-serif);
+            font-size: 1.2rem;
+            color: var(--text-main);
+            margin-top: 1.5rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .splash-hint {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+
+        #splash-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* --- LAYOUT CONTAINER --- */
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* --- HEADER --- */
+        header {
+            border-bottom: 1px solid var(--border);
+            background: var(--bg);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-inner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem 0;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+        }
+
+        .logo-text {
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--red);
+            letter-spacing: -0.05em;
+            line-height: 1;
+        }
+
+        .brand-title {
+            font-family: var(--font-serif);
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: var(--text-main);
+        }
+
+        /* --- SECTION HEADINGS --- */
+        .section-title {
+            font-family: var(--font-sans);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin: 2.5rem 0 1.5rem 0;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-title::before,
+        .section-title::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* --- COMPACT CATALOG / PUBLICATIONS --- */
+        .publications-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            margin-bottom: 4rem;
+        }
+
+        .book-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .book-card:hover {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            border-color: #44444e;
+        }
+
+        .book-meta {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--red);
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .book-title {
+            font-family: var(--font-serif);
+            font-size: 1.15rem;
+            font-weight: 600;
+            line-height: 1.25;
+            margin-bottom: 0.2rem;
+            color: var(--text-main);
+        }
+
+        .book-author {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+            font-style: italic;
+        }
+
+        .book-desc {
+            font-size: 0.85rem;
+            color: #c8c8cf;
+            margin-bottom: 1rem;
+            line-height: 1.45;
+        }
+
+        .book-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border);
+            padding-top: 0.75rem;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .btn-link {
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .btn-link:hover {
+            color: var(--red);
+        }
+
+        /* --- ARTICLE MODAL --- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(15, 15, 17, 0.85);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 2rem 1rem;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            max-width: 720px;
+            margin: 2rem auto;
+            padding: 2.5rem;
+            position: relative;
+            border-radius: 4px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1.25rem;
+            right: 1.5rem;
+            font-size: 1.8rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.2s ease;
+        }
+
+        .close-btn:hover {
+            color: var(--red);
+        }
+
+        .modal-body h2 {
+            font-family: var(--font-serif);
+            font-size: 1.6rem;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        .modal-body .article-meta-tag {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--red);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .article-text {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: #d0d0d5;
+            white-space: pre-line;
+        }
+
+        .article-text h3 {
+            font-family: var(--font-serif);
+            font-size: 1.2rem;
+            color: var(--text-main);
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.25rem;
+        }
+
+        .article-text strong {
+            color: var(--text-main);
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .splash-logo { font-size: 5rem; }
+            .logo-text { font-size: 1.75rem; }
+            .brand-title { font-size: 0.95rem; }
+            .book-card { padding: 1rem; }
+            .modal-content { padding: 1.5rem; margin: 1rem auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LANDING / SPLASH SCREEN -->
+    <div id="splash-screen" onclick="enterSite()">
+        <div class="splash-logo">MS</div>
+        <div class="splash-subtitle">MaterialSichtung Verlag</div>
+        <div class="splash-hint">Klicken zum Eintreten</div>
+    </div>
+
+    <!-- HEADER -->
+    <header>
+        <div class="container header-inner">
+            <div class="brand" onclick="location.reload()">
+                <span class="logo-text">MS</span>
+                <span class="brand-title">MaterialSichtung Verlag</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="container">
+
+        <section id="katalog">
+            <div class="section-title">Neuerscheinungen & Publikationen</div>
+            <div class="publications-list">
+                
+                <!-- CARD 1 -->
+                <article class="book-card" onclick="openModal('art-1')">
+                    <div>
+                        <div class="book-meta">Band I — Kritik & Analyse</div>
+                        <h2 class="book-title">Kritik der Wehrpflicht, Aufrüstung und Kriegstüchtigkeit</h2>
+                        <div class="book-author">Eine marxistische & interessenbasierte Analyse</div>
+                        <p class="book-desc">Eine Untersuchung der Widersprüche zwischen Staatsinteressen und Bürgerinteressen im Kontext militärischer Aufrüstung und Konflikte.</p>
+                    </div>
+                    <div class="book-footer">
+                        <span>Analyse / Text</span>
+                        <span class="btn-link">Artikel lesen →</span>
+                    </div>
+                </article>
+
+                <!-- CARD 2 -->
+                <article class="book-card" onclick="openModal('art-2')">
+                    <div>
+                        <div class="book-meta">Band II — Ökonomische Kritik</div>
+                        <h2 class="book-title">Lohnarbeit und Kapital im 21. Jahrhundert</h2>
+                        <div class="book-author">Zur Funktion der Sozialstaatlichkeit im Akkumulationsprozess</div>
+                        <p class="book-desc">Eine Analyse darüber, wie staatliche Sozialleistungen wie das Bürgergeld die Zwangslage zur Lohnarbeit sichern statt aufzuheben.</p>
+                    </div>
+                    <div class="book-footer">
+                        <span>Analyse / Text</span>
+                        <span class="btn-link">Artikel lesen →</span>
+                    </div>
+                </article>
+
+                <!-- CARD 3 -->
+                <article class="book-card" onclick="openModal('art-3')">
+                    <div>
+                        <div class="book-meta">Band III — Staatstheorie</div>
+                        <h2 class="book-title">Der Illusionismus der bürgerlichen Demokratie</h2>
+                        <div class="book-author">Gemeinwohl vs. Klassengesellschaft</div>
+                        <p class="book-desc">Warum Wahlen keine Mitbestimmung über die Zwecke der staatlichen Macht bedeuten, sondern die Legitimation der Herrschaft darstellen.</p>
+                    </div>
+                    <div class="book-footer">
+                        <span>Analyse / Text</span>
+                        <span class="btn-link">Artikel lesen →</span>
+                    </div>
+                </article>
+
+                <!-- CARD 4 -->
+                <article class="book-card" onclick="openModal('art-4')">
+                    <div>
+                        <div class="book-meta">Band IV — Ideologiekritik</div>
+                        <h2 class="book-title">Kritik der Moral und des bürgerlichen Pflichtbewusstseins</h2>
+                        <div class="book-author">Die Verwandlung gesellschaftlicher Zwänge in innere Pflichten</div>
+                        <p class="book-desc">Untersuchung, wie Moralität als subjektives Werkzeug dient, um systemische Entsagung und Verzweckung rational zu rechtfertigen.</p>
+                    </div>
+                    <div class="book-footer">
+                        <span>Analyse / Text</span>
+                        <span class="btn-link">Artikel lesen →</span>
+                    </div>
+                </article>
+
+                <!-- CARD 5 -->
+                <article class="book-card" onclick="openModal('art-5')">
+                    <div>
+                        <div class="book-meta">Band V — Geopolitik</div>
+                        <h2 class="book-title">Geopolitische Konkurrenz und Imperialismus</h2>
+                        <div class="book-author">Das Verhältnis von Staatsgewalt, Märkten und Ressourcen</div>
+                        <p class="book-desc">Eine Rekonstruktion internationaler Konflikte aus der Perspektive der nationalen Kapitalakkumulation und Territoriumsverteidigung.</p>
+                    </div>
+                    <div class="book-footer">
+                        <span>Analyse / Text</span>
+                        <span class="btn-link">Artikel lesen →</span>
+                    </div>
+                </article>
+
+                <!-- CARD 6 -->
+                <article class="book-card" onclick="openModal('art-6')">
+                    <div>
+                        <div class="book-meta">Band VI — Medienanalyse</div>
+                        <h2 class="book-title">Die Produktion von Zustimmung in der Berichterstattung</h2>
+                        <div class="book-author">Funktion der Öffentlichkeit in Zeiten der Aufrüstung</div>
+                        <p class="book-desc">Wie journalistische Narrative geopolitische Staatsziele als alternativlose Sicherheitsinteressen der Zivilbevölkerung vermitteln.</p>
+                    </div>
+                    <div class="book-footer">
+                        <span>Analyse / Text</span>
+                        <span class="btn-link">Artikel lesen →</span>
+                    </div>
+                </article>
+
+                <!-- CARD 7 -->
+                <article class="book-card" onclick="openModal('art-7')">
+                    <div>
+                        <div class="book-meta">Band VII — Antimilitarismus</div>
+                        <h2 class="book-title">Möglichkeiten und Grenzen individueller Verweigerung</h2>
+                        <div class="book-author">Strategien gegen den staatlichen Zugriff</div>
+                        <p class="book-desc">Untersuchung von Kriegsdienstverweigerung, Flucht und kollektiver Selbstorganisation aus der Sicht partikularer Bürgerinteressen.</p>
+                    </div>
+                    <div class="book-footer">
+                        <span>Analyse / Text</span>
+                        <span class="btn-link">Artikel lesen →</span>
+                    </div>
+                </article>
+
+                <!-- CARD 8 -->
+                <article class="book-card" onclick="openModal('art-8')">
+                    <div>
+                        <div class="book-meta">Band VIII — Erkenntnistheorie</div>
+                        <h2 class="book-title">Dialektischer Materialismus und Ideologiekritik</h2>
+                        <div class="book-author">Einführung in die begriffliche Methodik der Kritik</div>
+                        <p class="book-desc">Über die Notwendigkeit, gesellschaftliche Erscheinungen aus ihren materiellen Widersprüchen statt aus idealistischen Prinzipien zu erklären.</p>
+                    </div>
+                    <div class="book-footer">
+                        <span>Analyse / Text</span>
+                        <span class="btn-link">Artikel lesen →</span>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ARTICLE MODALS -->
+
+    <!-- MODAL 1 -->
+    <div id="art-1" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('art-1')">&times;</span>
+            <div class="modal-body">
+                <div class="article-meta-tag">Band I — Kritik & Analyse</div>
+                <h2>Kritik der Wehrpflicht, Aufrüstung und Kriegstüchtigkeit</h2>
+                <div class="article-text">
+<strong>Überblick & Struktur des Videos</strong>
+In diesem Video legt der Creator aus einer marxistisch/interessenbasierten Perspektive (angelehnt an den Gegenstandpunkt sowie Positionen von Personen wie Ole Nymann) dar, warum er die Wiedereinführung der Wehrpflicht und die allgemeine Aufrüstung/Kriegstüchtigkeit strikt ablehnt.
+
+Das Video gliedert sich in drei Hauptteile:
+1. Das Hauptargument gegen Wehrpflicht, Kriegstüchtigkeit und Aufrüstung
+2. Entkräftung gängiger Gegenargumente und Kritikpunkte
+3. Alternativen und Handlungsempfehlungen für Bürger & Zivilbevölkerung
+
+---
+
+<h3>1. Das Hauptargument gegen die Wehrpflicht [00:30]</h3>
+
+• <strong>Staatsinteressen vs. Bürgerinteressen: [05:45]</strong>
+Der Staat und die Bevölkerung verfolgen grundsätzlich unterschiedliche Interessen. Staaten sind politische Gebilde, deren Hauptziel die Erhaltung und Vergrößerung der eigenen Macht, des Territoriums und des Kapitals ist. Bürger bzw. Arbeiter hingegen haben primär ein materielles und körperliches Interesse an Sicherheit, Überleben und Lebensqualität.
+
+• <strong>Kastensystem im Krieg (Konfliktariat vs. Exekutariat): [08:43]</strong>
+- <em>Konfliktariat:</em> Die politische Führung/Kaste, die Gewalt delegiert und entscheidet, ohne selbst an der Front ihr Leben zu riskieren (z. B. Politiker).
+- <em>Exekutariat:</em> Die Bürger und Soldaten, die gezwungen werden, diese Gewalt physisch auszuüben und ihr Leben zu opfern.
+
+• <strong>Beispiel Ukraine & Russland: [12:00]</strong>
+Der Erhalt von Territorium oder Industriekomplexen (z. B. Fabriken im Donbas) dient dem staatlichen Kapital und der geopolitischen Macht des Staates, bringt aber dem einzelnen Bürger (z. B. in Kiew) keinen direkten Nutzen. Trotzdem entscheidet der Staat im Konfliktfall, strategische Wirtschafts- und Machtobjekte zu verteidigen, statt das Leben und die Wünsche der Bevölkerung zu priorisieren [24:30].
+
+• <strong>Soldaten besitzen keine Mitbestimmung: [06:34]</strong>
+Egal wie viel ein Soldat an der Front leistet oder opfert, er erhält dadurch keinerlei politische Entscheidungsgewalt über den weiteren Kriegsverlauf oder die Staatsziele. Er bleibt bloßes Werkzeug / „Bauernopfer“ des Staates [40:11].
+
+• <strong>Kein Nutzen durch staatlichen Wohlstand im Kapitalismus: [31:46]</strong>
+Auch das Argument, dass Wirtschaftsschutz letztlich den Bürgern über Sozialleistungen zugutekomme, wird abgelehnt. Der bürgerliche Staat halte Sozialleistungen (wie Bürgergeld) bewusst niedrig, um den Zwang zur Lohnarbeit aufrechtzuerhalten, mit der wiederum staatliches Kapital generiert wird [34:43].
+
+---
+
+<h3>2. Entkräftung von Gegenargumenten</h3>
+
+• <strong>Argument 1: „Antimilitarismus ignoriert reale Bedrohungen“ [38:57]</strong>
+Der Sprecher erkennt an, dass z. B. Russland die Ukraine völkerrechtswidrig und unprovoziert angegriffen hat [41:45]. Dennoch rechtfertige dies nicht den staatlichen Zwang zur Wehrpflicht. Es müsse unterschieden werden zwischen der Bedrohung durch den Angreifer und der Instrumentalisierung der Bürger durch den eigenen Staat [40:24].
+
+• <strong>Argument 2: „Militärische Aufrüstung dient der Abschreckung“ [52:07]</strong>
+Die Logik der Abschreckung mag militärisch funktionieren, bedeutet aber im Ernstfall, dass Bürger bei einem Scheitern der Abschreckung dennoch vom Staat gezwungen werden, als Kanonenfutter zu dienen [01:01:04]. Wenn eine Bevölkerung gemeinsam beschließen würde zu fliehen oder nicht zu kämpfen, würde der Staat dies verhindern, da er sein Territorium nicht aufgeben will [01:01:25].
+
+• <strong>Argument 3: „Der Begriff des Staates wird unzulässig verallgemeinert“ [01:02:40]</strong>
+Auch wenn es Qualitätsunterschiede zwischen Staaten gibt (z. B. Demokratie vs. Autokratie/Diktatur), gelte die Grundstruktur der Verzweckung der eigenen Bevölkerung in jedem Staat – unabhängig davon, ob er kapitalistisch, demokratisch oder sozialistisch aufgebaut ist [01:07:55]. Jeder Staat handelt im Ernstfall nach seiner Selbsterhaltungs- und Machtlogik [01:12:17].
+
+---
+
+<h3>3. Alternativen und Handlungsempfehlungen [01:13:12]</h3>
+
+• <strong>Für den Staat: [01:19:38]</strong>
+Der Creator sieht keine Empfehlungen für den Staat vor, da der Staat aus seiner Sicht aus seiner eigenen Logik heraus „richtig“ für seine Machtinteressen handelt.
+
+• <strong>Für den einzelnen Bürger / die Zivilbevölkerung: [01:16:23]</strong>
+- <em>Militärdienst & Musterung verweigern: [01:17:30]</em> Nutzen der legalen Wege zur Kriegsdienstverweigerung in Deutschland. Bereits die Musterung sollte verweigert werden.
+- <em>Organisation & Protest: [01:16:35]</em> Teilnahme an antimilitaristischen Initiativen und Schulstreiks gegen die Wehrpflicht.
+- <em>Flucht im Ernstfall: [01:15:30]</em> Wenn ein Land angegriffen wird und man nicht freiwillig kämpfen möchte, sei die Flucht (Flüchtling werden) das vernünftigste individuelle und kollektive Interesse der Bevölkerung zum Schutz des eigenen Lebens [01:19:25].
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2 -->
+    <div id="art-2" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('art-2')">&times;</span>
+            <div class="modal-body">
+                <div class="article-meta-tag">Band II — Ökonomische Kritik</div>
+                <h2>Lohnarbeit und Kapital im 21. Jahrhundert</h2>
+                <div class="article-text">
+<strong>Überblick & Struktur des Videos</strong>
+In dieser Analyse wird untersucht, wie der moderne bürgerliche Staat den Arbeitsmarkt reguliert und warum Sozialleistungen wie das Bürgergeld nicht der Überwindung von Armut dienen, sondern der Aufrechterhaltung des Lohnarbeitszwangs.
+
+<h3>1. Die ökonomische Logik der Lohnarbeit [02:15]</h3>
+• <strong>Verwertung von Arbeitskraft: [05:10]</strong> Der Arbeiter besitzt kein eigenes Produktionsmittel und ist gezwungen, seine Arbeitskraft als Ware zu verkaufen. Der dadurch erzeugte Mehrwert verbleibt beim Eigentümer des Kapitals.
+• <strong>Die Funktion des Sozialstaats: [11:30]</strong> Existenzsichernde Leistungen werden bewusst an der untersten Grenze gehalten. Sie dienen der Reproduktion der Arbeitskraft, verhindern aber gleichzeitig, dass sich Individuen dem Verwertungsprozess entziehen.
+
+<h3>2. Kritik moderner Wohlfahrtstheorien [22:40]</h3>
+• Die Gegenüberstellung von "sozialer Gerechtigkeit" und "freier Marktwirtschaft" verkennt den strukturellen Zusammenhang: Der Staat benötigt ein funktionierendes Kapitalwachstum für seine eigenen Steuereinnahmen und Machtmittel [28:15].
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 3 -->
+    <div id="art-3" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('art-3')">&times;</span>
+            <div class="modal-body">
+                <div class="article-meta-tag">Band III — Staatstheorie</div>
+                <h2>Der Illusionismus der bürgerlichen Demokratie</h2>
+                <div class="article-text">
+<strong>Überblick & Struktur des Videos</strong>
+Der Beitrag analysiert die parlamentarische Demokratie aus einer materialistischen Staatstheorie heraus.
+
+<h3>1. Die Natur des bürgerlichen Parlaments [01:10]</h3>
+• <strong>Legitimation durch Wahlen: [04:45]</strong> Die Wahl berechtigt Bürger dazu, Personal auszuwählen, gibt ihnen jedoch keine inhaltliche Mitbestimmung über die grundlegenden Zwecke der staatlichen Machtentfaltung.
+• <strong>Das Gemeinwohl-Narrativ: [15:20]</strong> Der Staat präsentiert sich als überparteilicher Sachwalter aller Bürger, vertritt aber strukturell die Durchsetzung der nationalen Wirtschaftsordnung [19:50].
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 4 -->
+    <div id="art-4" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('art-4')">&times;</span>
+            <div class="modal-body">
+                <div class="article-meta-tag">Band IV — Ideologiekritik</div>
+                <h2>Kritik der Moral und des bürgerlichen Pflichtbewusstseins</h2>
+                <div class="article-text">
+<strong>Überblick & Struktur des Videos</strong>
+Eine kritische Dekonstruktion von Moral als Mittel gesellschaftlicher Disziplinierung und Selbstverzweckung.
+
+<h3>1. Moral als verinnerlichter Zwang [03:00]</h3>
+• <strong>Das Pflichtgefühl: [07:20]</strong> Wenn staatliche und ökonomische Notwendigkeiten in ethische Pflichten umgedeutet werden, akzeptieren Subjekte ihre eigene Verzweckung als tüchtig und moralisch wertvoll.
+• <strong>Verurteilung von Verweigerung: [14:10]</strong> Wer sich dem staatlichen Dienst oder der Verwertung entzieht, wird moralisch als "unsolidarisch" oder "faul" gebrandmarkt [18:35].
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 5 -->
+    <div id="art-5" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('art-5')">&times;</span>
+            <div class="modal-body">
+                <div class="article-meta-tag">Band V — Geopolitik</div>
+                <h2>Geopolitische Konkurrenz und Imperialismus</h2>
+                <div class="article-text">
+<strong>Überblick & Struktur des Videos</strong>
+Dieser Beitrag erklärt internationale Spannungen aus der Notwendigkeit nationaler Staaten, weltweite Markt- und Einflusszonen abzusichern.
+
+<h3>1. Ökonomie der Gewalt [02:50]</h3>
+• <strong>Machtentfaltung nach außen: [08:15]</strong> Das Wachstum nationaler Kapitalien erfordert den Zugriff auf weltweite Märkte, Rohstoffe und Handelsrouten, was zwangsläufig zur Konkurrenz mit anderen Staaten führt.
+• <strong>Sicherheitsdoktrinen: [16:40]</strong> Aufrüstung ist nicht Verteidigung um des Friedens willen, sondern das notwendige Erpressungspotenzial im internationalen Staatensystem [22:10].
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 6 -->
+    <div id="art-6" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('art-6')">&times;</span>
+            <div class="modal-body">
+                <div class="article-meta-tag">Band VI — Medienanalyse</div>
+                <h2>Die Produktion von Zustimmung in der Berichterstattung</h2>
+                <div class="article-text">
+<strong>Überblick & Struktur des Videos</strong>
+Eine Medienkritik über die Entstehung öffentlicher Diskurse rund um Krise, Krieg und nationale Integrität.
+
+<h3>1. Der Rahmen der Berichterstattung [01:40]</h3>
+• <strong>Nationale Perspektivübernahme: [06:00]</strong> Medien ordnen Ereignisse primär unter dem Blickwinkel "Was bedeutet das für unser Land?" ein, wodurch die Interessen der Regierenden zur eigenen Perspektive werden.
+• <strong>Erzeugung von Sachzwängen: [13:25]</strong> Notwendigkeiten staatlichen Handelns werden als alternativlose Bürgerpflichten vermittelt [19:00].
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 7 -->
+    <div id="art-7" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('art-7')">&times;</span>
+            <div class="modal-body">
+                <div class="article-meta-tag">Band VII — Antimilitarismus</div>
+                <h2>Möglichkeiten und Grenzen individueller Verweigerung</h2>
+                <div class="article-text">
+<strong>Überblick & Struktur des Videos</strong>
+Praktische und theoretische Überlegungen zum Umgang mit staatlichen Dienstpflichten und Rekrutierungsversuchen.
+
+<h3>1. Strategien der Verweigerung [02:10]</h3>
+• <strong>Rechtliche Wege vs. Reale Verweigerung: [07:30]</strong> Die rechtliche Kriegsdienstverweigerung verbleibt im Rahmen staatlicher Regelungen, während individuelle Entziehung oder Flucht den direkten Zugriff unterbinden.
+• <strong>Kollektiver Zivilprotest: [15:00]</strong> Warum Schulstreiks, Aufklärung und Bündnisse zur Verweigerung von Musterung und Rekrutierung essenziell sind [21:40].
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 8 -->
+    <div id="art-8" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('art-8')">&times;</span>
+            <div class="modal-body">
+                <div class="article-meta-tag">Band VIII — Erkenntnistheorie</div>
+                <h2>Dialektischer Materialismus und Ideologiekritik</h2>
+                <div class="article-text">
+<strong>Überblick & Struktur des Videos</strong>
+Eine theoretische Einführung in die Grundlagen der materialistischen Gesellschaftsanalyse.
+
+<h3>1. Methode der Kritik [02:00]</h3>
+• <strong>Vom Schein zum Begriff: [06:15]</strong> Kritik misst Zustände nicht an moralischen Idealen, sondern analysiert die realen ökonomischen und politischen Bedingungen, die diese Zustände notwendig hervorbringen.
+• <strong>Überwindung bürgerlicher Bewusstseinsformen: [14:50]</strong> Ideologiekritik deckt auf, wie gesellschaftliche Verhältnisse als "natürlich" oder "alternativlos" wahrgenommen werden [20:30].
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function enterSite() {
+            const splash = document.getElementById('splash-screen');
+            splash.classList.add('hidden');
+        }
+
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+    </script>
+
+</body>
+</html>
