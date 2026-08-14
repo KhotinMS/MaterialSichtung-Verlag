@@ -1,69 +1,420 @@
-<main class="container">
-    <section id="katalog">
-        <div class="section-title">INHALT</div>
-        <div class="publications-list">
-            
-            <article class="book-card" onclick="openModal('art-1')">
-                <div>
-                    <div class="book-meta">Ethik 1 — Theorie</div>
-                    <h2 class="book-title">"Bioauthentizismus"</h2>
-                    <div class="book-author">Eine naturalistische Ethiktheorie</div>
-                    <p class="book-desc">Warum die Moralphilosophie ein neues Fundament braucht.</p>
-                </div>
-                <div class="book-footer">
-                    <span>Analyse / Text</span>
-                    <span class="btn-link">Artikel lesen →</span>
-                </div>
-            </article>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MaterialSichtung Verlag — Wissenschaftliche Publikationen</title>
+    <style>
+        /* --- CSS RESET & DARK MODE VARIABLES --- */
+        :root {
+            --red: #ff3333;
+            --bg: #0f0f11;
+            --card-bg: #18181c;
+            --text-main: #e6e6e8;
+            --text-muted: #9999a1;
+            --border: #2a2a30;
+            --font-serif: "Georgia", "Times New Roman", serif;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
 
-            <article class="book-card" onclick="openModal('art-2')">
-                <div>
-                    <div class="book-meta">Antwort auf Kritik — Thema: Ethik</div>
-                    <h2 class="book-title">Antwort auf Kritik bzgl. "Bioauthentizismus"</h2>
-                    <div class="book-author">Matti Meincke</div>
-                    <p class="book-desc">Replik & Einordnung bzgl. Basis und Superstruktur.</p>
-                </div>
-                <div class="book-footer">
-                    <span>Analyse / Text</span>
-                    <span class="btn-link">Artikel lesen →</span>
-                </div>
-            </article>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* --- SPLASH / LANDING SCREEN --- */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--bg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            cursor: pointer;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        .splash-logo {
+            font-family: var(--font-serif);
+            font-size: 8rem;
+            font-weight: 700;
+            color: var(--red);
+            letter-spacing: -0.05em;
+            line-height: 1;
+            user-select: none;
+            transition: transform 0.3s ease;
+        }
+
+        .splash-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .splash-subtitle {
+            font-family: var(--font-serif);
+            font-size: 1.2rem;
+            color: var(--text-main);
+            margin-top: 1.5rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        #splash-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* --- LAYOUT CONTAINER --- */
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* --- HEADER --- */
+        header {
+            border-bottom: 1px solid var(--border);
+            background: var(--bg);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-inner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem 0;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+        }
+
+        .logo-text {
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--red);
+            letter-spacing: -0.05em;
+            line-height: 1;
+        }
+
+        .brand-text {
+            font-family: var(--font-serif);
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: var(--text-main);
+        }
+
+        /* --- SECTION HEADINGS --- */
+        .section-title {
+            font-family: var(--font-sans);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin: 2.5rem 0 1.5rem 0;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-title::before,
+        .section-title::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* --- COMPACT CATALOG / PUBLICATIONS --- */
+        .publications-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            margin-bottom: 4rem;
+        }
+
+        .book-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .book-card:hover {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            border-color: #44444e;
+        }
+
+        .book-meta {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--red);
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .book-title {
+            font-family: var(--font-serif);
+            font-size: 1.15rem;
+            font-weight: 600;
+            line-height: 1.25;
+            margin-bottom: 0.2rem;
+            color: var(--text-main);
+        }
+
+        .book-author {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+            font-style: italic;
+        }
+
+        .book-desc {
+            font-size: 0.85rem;
+            color: #c8c8cf;
+            margin-bottom: 1rem;
+            line-height: 1.45;
+        }
+
+        .book-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border);
+            padding-top: 0.75rem;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .btn-link {
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .btn-link:hover {
+            color: var(--red);
+        }
+
+        /* --- ARTICLE MODAL --- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(15, 15, 17, 0.85);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 2rem 1rem;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            max-width: 720px;
+            margin: 2rem auto;
+            padding: 2.5rem;
+            position: relative;
+            border-radius: 4px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1.25rem;
+            right: 1.5rem;
+            font-size: 1.8rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.2s ease;
+        }
+
+        .close-btn:hover {
+            color: var(--red);
+        }
+
+        .modal-body h2 {
+            font-family: var(--font-serif);
+            font-size: 1.6rem;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        .modal-body .article-meta-tag {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--red);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .article-text {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: #d0d0d5;
+            white-space: pre-line;
+        }
+
+        .article-text strong {
+            color: var(--text-main);
+        }
+
+        @media (max-width: 768px) {
+            .splash-logo { font-size: 5rem; }
+            .logo-text { font-size: 1.75rem; }
+            .brand-text { font-size: 0.95rem; }
+            .book-card { padding: 1rem; }
+            .modal-content { padding: 1.5rem; margin: 1rem auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="splash-screen" onclick="enterSite()">
+        <div class="splash-logo">MS</div>
+        <div class="splash-subtitle">MaterialSichtung Verlag</div>
+    </div>
+
+    <header>
+        <div class="container header-inner">
+            <div class="brand" onclick="location.reload()">
+                <span class="logo-text">MS</span>
+                <span class="brand-text">MaterialSichtung Verlag</span>
+            </div>
         </div>
-    </section>
-</main>
+    </header>
 
-<div id="art-1" class="modal">
-    <div class="modal-content">
-        <span class="close-btn" onclick="closeModal('art-1')">&times;</span>
-        <div class="modal-body">
-            <div class="article-meta-tag">Ethik I — Haupttext</div>
-            <h2>Bioauthentizismus</h2>
-            <div class="article-text">
+    <main class="container">
+        <section id="katalog">
+            <div class="section-title">INHALT</div>
+            <div class="publications-list">
+                
+                <article class="book-card" onclick="openModal('art-1')">
+                    <div>
+                        <div class="book-meta">Antwort auf Kritik - Thema: Ethik</div>
+                        <h2 class="book-title">Antwort auf Kritik bzgl. "Bioauthentizismus"</h2>
+                        <div class="book-author">Eine naturalistische Ethiktheorie</div>
+                        <p class="book-desc">Warum die Moralphilosophie ein neues Fundament braucht.</p>
+                    </div>
+                    <div class="book-footer">
+                        <span>Analyse / Text</span>
+                        <span class="btn-link">Artikel lesen →</span>
+                    </div>
+                </article>
+
+                <article class="book-card" onclick="openModal('art-2')">
+                    <div>
+                        <div class="book-meta">Ethik 1</div>
+                        <h2 class="book-title">Antwort & Replik</h2>
+                        <div class="book-author">Matti Meincke</div>
+                        <p class="book-desc">Untersuchung der moralischen Basis vs. Superstruktur.</p>
+                    </div>
+                    <div class="book-footer">
+                        <span>Analyse / Text</span>
+                        <span class="btn-link">Artikel lesen →</span>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+    </main>
+
+    <div id="art-1" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('art-1')">&times;</span>
+            <div class="modal-body">
+                <div class="article-meta-tag">Ethik I — Analyse</div>
+                <h2>Bioauthentizismus</h2>
+                <div class="article-text">
 <strong>"BIOAUTHENTIZISMUS"</strong>
 Teil I: Warum die Moralphilosophie ein neues Fundament braucht
 Teil II: Die biologischen Grundlagen der Moral
 Teil III: Die Theorie des Bioauthentizismus (vollständig ausgearbeitet)
 
-Meine moralische Theorie beginnt mit der Annahme, dass Moral nicht etwas ist, das vollständig unabhängig vom menschlichen Organismus existiert...
+Meine moralische Theorie beginnt mit der Annahme, dass Moral nicht etwas ist, das vollständig unabhängig vom menschlichen Organismus existiert. Moral ist keine rein abstrakte Struktur außerhalb des Menschen, sondern eine Eigenschaft biologischer Wesen...
+                </div>
             </div>
         </div>
     </div>
-</div> <div id="art-2" class="modal">
-    <div class="modal-content">
-        <span class="close-btn" onclick="closeModal('art-2')">&times;</span>
-        <div class="modal-body">
-            <div class="article-meta-tag">Antwort auf Kritik</div>
-            <h2>Replik bzgl. Moralbasis & Superstruktur</h2>
-            <div class="article-text">
-<strong>"Antwort & Replik"</strong>
+
+    <div id="art-2" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('art-2')">&times;</span>
+            <div class="modal-body">
+                <div class="article-meta-tag">Test für Artikel 2</div>
+                <h2>Replik & Analyse</h2>
+                <div class="article-text">
+<strong>"Titel"</strong>
 Matti Meincke — 23.07.2026
 MaterialSichtung Verlag
 
 Antwort:
 1. Zuerst werde ich auf die Fragen am Anfang in Reihenfolge eingehen:
-Wie unterscheidet sich moralische Basis und Superstruktur wesentlich voneinander?...
+Wie unterscheidet sich moralische Basis und Superstruktur wesentlich voneinander?
+Der Unterschied liegt in den materiellen Eigenschaften der Fähigkeiten...
+                </div>
             </div>
         </div>
     </div>
-</div> ```
+
+    <script>
+        function enterSite() {
+            document.getElementById('splash-screen').classList.add('hidden');
+        }
+
+        function openModal(id) {
+            document.getElementById(id).style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+    </script>
+</body>
+</html>
