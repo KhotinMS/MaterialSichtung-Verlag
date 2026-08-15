@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MaterialSichtung Verlag — Wissenschaftliche Publikationen</title>
+    <style>
+        /* --- CSS RESET & DARK MODE VARIABLES --- */
+        :root {
+            --red: #ff3333;
+            --bg: #0f0f11;
+            --card-bg: #18181c;
+            --text-main: #e6e6e8;
+            --text-muted: #9999a1;
+            --border: #2a2a30;
+            --font-serif: "Georgia", "Times New Roman", serif;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+/* --- BLOCKQUOTE STYLES --- */
+.article-text blockquote {
+    margin: 1.5rem 0;
+    padding: 1rem 1.25rem;
+    background-color: #121215;
+    border-left: 3px solid var(--black);
+    color: #b0b0b8;
+    font-style: italic;
+    border-radius: 0 4px 4px 0;
+}
+
+/* Optional styling if the quote has a source attribution */
+.article-text blockquote cite {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    font-style: normal;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* --- SPLASH / LANDING SCREEN --- */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--bg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            cursor: pointer;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        .splash-logo {
+            font-family: var(--font-serif);
+            font-size: 8rem;
+            font-weight: 700;
+            color: var(--red);
+            letter-spacing: -0.05em;
+            line-height: 1;
+            user-select: none;
+            transition: transform 0.3s ease;
+        }
+
+        .splash-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .splash-subtitle {
+            font-family: var(--font-serif);
+            font-size: 1.2rem;
+            color: var(--text-main);
+            margin-top: 1.5rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        #splash-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* --- LAYOUT CONTAINER --- */
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* --- HEADER --- */
+        header {
+            border-bottom: 1px solid var(--border);
+            background: var(--bg);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-inner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem 0;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+        }
+
+        .logo-text {
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--red);
+            letter-spacing: -0.05em;
+            line-height: 1;
+        }
+
+        .brand-text {
+            font-family: var(--font-serif);
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: var(--text-main);
+        }
+
+        /* --- SECTION HEADINGS --- */
+        .section-title {
+            font-family: var(--font-sans);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin: 2.5rem 0 1.5rem 0;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-title::before,
+        .section-title::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* --- COMPACT CATALOG / PUBLICATIONS --- */
+        .publications-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            margin-bottom: 4rem;
+        }
+
+        .book-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .book-card:hover {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            border-color: #44444e;
+        }
+
+        .book-meta {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--black);
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .book-title {
+            font-family: var(--font-serif);
+            font-size: 1.15rem;
+            font-weight: 600;
+            line-height: 1.25;
+            margin-bottom: 0.2rem;
+            color: var(--text-main);
+        }
+
+        .book-author {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+            font-style: italic;
+        }
+
+        .book-desc {
+            font-size: 0.85rem;
+            color: #c8c8cf;
+            margin-bottom: 1rem;
+            line-height: 1.45;
+        }
+
+        .book-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border);
+            padding-top: 0.75rem;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .btn-link {
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .btn-link:hover {
+            color: var(--red);
+        }
+
+        /* --- ARTICLE MODAL --- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(15, 15, 17, 0.85);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 2rem 1rem;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            max-width: 720px;
+            margin: 2rem auto;
+            padding: 2.5rem;
+            position: relative;
+            border-radius: 4px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1.25rem;
+            right: 1.5rem;
+            font-size: 1.8rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.2s ease;
+        }
+
+        .close-btn:hover {
+            color: var(--red);
+        }
+
+        .modal-body h2 {
+            font-family: var(--font-serif);
+            font-size: 1.6rem;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        .modal-body .article-meta-tag {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--red);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .article-text {
+            font-size: 0.79rem;
+            line-height: 1.7;
+            color: #d0d0d5;
+            white-space: pre-line;
+            text-align: justify;
+            p {text-align: center;}
+        }
+
+        .article-text strong {
+            color: var(--text-main);
+        }
+
+        @media (max-width: 768px) {
+            .splash-logo { font-size: 5rem; }
+            .logo-text { font-size: 1.75rem; }
+            .brand-text { font-size: 0.95rem; }
+            .book-card { padding: 1rem; }
+            .modal-content { padding: 1.5rem; margin: 1rem auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="splash-screen" onclick="enterSite()">
+        <div class="splash-logo">MS</div>
+        <div class="splash-subtitle">MaterialSichtung Verlag</div>
+    </div>
+
+    <header>
+        <div class="container header-inner">
+            <div class="brand" onclick="location.reload()">
+                <span class="logo-text">MS</span>
+                <span class="brand-text">MaterialSichtung Verlag</span>
+            </div>
+        </div>
+    </header>
+
+   <main class="container">
+    <section id="katalog">
+        <div class="section-title">ETHIK & REPRISEN</div>
+        <div class="publications-list">
+            
+            <article class="book-card" onclick="openModal('art-1')">
+                <div>
+                    <div class="book-meta">Antwort auf Kritik - Thema: Ethik</div>
+                    <h2 class="book-title">Antwort auf Kritik bzgl. "Bioauthentizismus"</h2>
+                    <div class="book-author">Khotin</div>
+                    <p class="book-desc">Warum die Moralphilosophie ein neues Fundament braucht.</p>
+                </div>
+                <div class="book-footer">
+                    <span>Analyse / Text</span>
+                    <span class="btn-link">Artikel lesen →</span>
+                </div>
+            </article>
+
+            <article class="book-card" onclick="openModal('art-2')">
+                <div>
+                    <div class="book-meta">Ethik 1</div>
+                    <h2 class="book-title">"Bioauthentizismus"</h2>
+                    <div class="book-author">Khotin</div>
+                    <p class="book-desc">Untersuchung der moralischen Basis vs. Superstruktur.</p>
+                </div>
+                <div class="book-footer">
+                    <span>Analyse / Text</span>
+                    <span class="btn-link">Artikel lesen →</span>
+                </div>
+            </article>
+
+        </div>
+
+        <div class="section-title">WÖCHENTLICHE PUBLIKATIONEN</div>
+        <div class="publications-list">
+
+            <article class="book-card" onclick="openModal('art-3')">
+                <div>
+                    <div class="book-meta">Wöchentliche Publikation</div>
+                    <h2 class="book-title">Ausgabe 32-26</h2>
+                    <div class="book-author">Khotin</div>
+                    <p class="book-desc">Aktuelle Analysen zur Außen- und Innenpolitik.</p>
+                </div>
+                <div class="book-footer">
+                    <span>Analyse / Text</span>
+                    <span class="btn-link">Artikel lesen →</span>
+                </div>
+            </article>
+
+        </div>
+    </section>
+</main>
+
+    <div id="art-1" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('art-1')">&times;</span>
+            <div class="modal-body">
+                <div class="article-meta-tag">Ethik I — Antwort</div>
+                <h2>Antwort auf "Bioauthentizismus"</h2>
+                <div class="article-text">
+<strong>"BIOAUTHENTIZISMUS"</strong>
+
+1.
+Zuerst werde ich auf die Fragen am Anfang in Reihenfolge eingehen:
+<blockquote>Wie unterscheidet sich moralische Basis und Superstruktur wesentlich voneinander? Der Unterschied liegt in den materiellen Eigenschaften der Fähigkeite. Diese sind biologisch.
+</blockquote>
+1.1 Empathie
+Wie in dem Dokument erklärt gehören hierzu: „Empathie, emotionale Reaktionen auf Leid, soziale Bindungsfähigkeit, Fairnessinstinkte, Kooperationsbereitschaft, Aggressionsmechanismen und individuelle emotionale Veranlagungen“. Diese lassen sich biologisch und neurowissenschaftlich begründen [1]. Hierzu eine Studie von M. Schlegel: „Die Neurowissenschaft entdeckte vor ein paar Jahren, dass Spiegelneuronen nicht nur bei Affen, sondern auch beim Menschen vorkommen, andere Untersuchungen beschäftigen sich mit der Frage, ob Empathie trainiert werden kann, indem die Plastizität des Gehirns in diesem Zusammenhang untersucht wird“[1:90]. Diese Spiegelneuronen scheinen viel mit der biologischen Konstruktion von Empathie im Menschen zu tun zu haben. Das ist aber keine eindeutige Erkenntnis1 [2:5]. Wenn die Neurowissenschaft aber empirisch beweisen könnte, das diese Spiegelneuronen tatsächlich maßgebend für Empathiefähigkeit verantwortlich sind, kann man Empathie aus der Basis ableiten. Moralische Intuition, die auf Empathie aufbaut, würde somit auf der Basis aufbauen, da die Spiegelneuronen nicht gelernt sind, sondern intrinsisch existieren. Bestimmte neurowissenschaftliche Theorien (auf die ich gleich eingehe) sehen die Spiegelneuronen als „[…] die physiologische Essenz der Empathie und Mitmenschlichkeit dar [...]“ [2:15]. Diese Theorie nennt sich „Spiegelneuronen-Theorie“ (SN-Theorie) [vgl. 2:15]. Bzgl. der Funktion dieser Neuronen, die beim Menschen nachgewiesen wurden: „The intriguing feature of many mirror neurons is that they fire not only when the animal is performing an action, such as grasping an object using a power grip, but also when the animal passively observes a similar action performed by another agent. It is widely believed that mirror neurons are a genetic adaptation for action understanding; that they were designed by evolution to fulfill a specific socio-cognitive function“ [3]. Also es gibt Neuronen beim Menschen, die feuern wenn sie passiv eine Aktion bei einer anderen Person wahrnehmen, gegeben das sie diese Aktion durch das eigene Handeln nachvollziehen können [vgl. 3]. Das erschafft noch keine Meinung zu der Aktion (ist diese Aktion richtig oder falsch?), aber es ist Teil der Basis für die emotionale Wahrnehmung der Aktion. Dieser Prozess ist Teil der Basis, weil er (1) Konsensfrei durch den Körper durchgeführt wird, (2) Ein passiver Teil der menschlichen Wahrnehmung ist, (3) unabhängig von der Superstruktur seine Wirkung findet. Genauer: „According to the most detailed early study […] mirror neurons comprised 17% of sampled cells in the portion of F5 that was examined, and exhibit the following properties. The cells were activated when the monkey observed hand and/or mouth movements that were directed toward objects (“goal-directed” actions)“ [4]. Also die emotionale Wahrnehmung davon welche Ziel ein Affe hat wenn er mit einem Objekt interagiert ist biologisch [vgl. 4]. Da diese Neuronen auch im Menschen gefunden wurden kann man die Theorie aufstellen, dass die menschliche, emotionale Wahrnehmung von anderen Menschen wie sie mit Objekten umgehen Teil der Basis ist. Diese Neuronen wurden in der Wissenschaft zur Sensation gemacht, weil sie angeblich alles am menschlichen Verhalten erklären könnte [5]. Wir wissen inzwischen, dass sie das nicht erklären können [6]. Es würde auch gegen meine kompatibilistisch These sprechen, wenn sie das tun würden2. Meine These ist, dass Dinge wie die Spiegelneuronen die Basis legen, und alles was sie nicht erklären können ist Teil der Superstruktur. Die Spiegelneuronen sagen nur, wie die emotionale Wahrnehmung von Objekt-gerichteten Aktionen funktioniert in der Wahrnehmung des Zuschauers, aber sie erklärt auch nicht mehr. Das liegt daran, so meine These, dass der Rest in der Superstruktur liegt. Mit dieser These stimme ich also einerseits die Sozialbiologie und andererseits sozialwissenschaftliche Ideen nicht zu. Idee von A. Medics (2018) aus der Neurobiologie sind hier angebrachter: „Die menschliche Empathie ist ein psychologisches Konstrukt, welches sowohl aus kognitiven, als auch aus emotionalen Komponenten zusammengesetzt ist (Shamay-Tsoory 2011). Eine beeinträchtigte Empathie ist ein zentrales Merkmal von verschiedenen neurologischen und psychiatrischen Erkrankungen, wie etwa der frontotemporalen Degeneration (Rankin et al. 2005, Rankin et al. 2006), Autismus, der Borderline-Persönlichkeitsstörung (Dziobek et al. 2008) und Schizophrenie (Lee et al. 2011)“ [7:14]. Diese Theorie geht davon aus, dass die Empathie ein Konstrukt ist, dass psychologisch begründet ist [vgl. 7:14]. „Studien haben sich weiterhin mit der Frage auseinandergesetzt ob die Empathie auf geteilten neurologischen Netzwerken für das eigene und das stellvertretende Erleben von Gefühlen beruht, und ob empathische Reaktionen mehr von Bottom-Up-, oder von Top-Down-Prozessen gesteuert werden. Interessant sind auch Untersuchungen der Relevanz von verschiedenen Hormonen wie Oxytocin, Arginin-Vasopressin, Opiaten oder Testosteron. Gemeinsam mit der Entwicklungspsychologie und –biologie beleuchtet die Neurobiologie inzwischen auch die ontogenetische Entwicklung der Empathie, wobei das Phänomen hierbei in verschiedene Teile zergliedert werden muss, da diese jeweils unterschiedliche Entwicklungsgeschwindigkeiten aufweisen“ [7:3]. Klar kann man also nichts beweisen, aber die Hypothese der Moralbasis lässt sich so ableiten.
+Ich komme jetzt zu der Linguistik.
+
+1.2 Linguistik
+Es gibt neurolinguistische Gründe, weshalb manche Menschen eher diskriminierende Beleidigungen benutzen und andere eher Beleidigungen auf Basis der Fähigkeit eines Menschen. Diese Erkenntnisse sind in ihrem Kern linguistisch, werden aber auch von der Psychologie aufgegriffen und sind so auch in die Pop-Psychologie gekommen. So z. B. der DF: „Menschen neigen zu Stereotypen und Schubladendenken. Und das wahrscheinlich nicht nur durch Sozialisation, sondern auch aufgrund der Funktionsweise unserer Gehirne. Wie lassen sich unsere kognitiven Denkschablonen besser verstehen“ [8]? Die Erklärung hierfür kommt anscheinend aus der Neuropolitik [8]. Die Beispiele die der Artikel nennt sind jetzt alle ein bisschen Arsch aber sie schreiben sowas wie: „Unser Gehirn sortiert in sogenannte Ingroups und Outgroups, also in die eigene Gruppe und die fremde Gruppe. Das zeigen beispielsweise Experimente mit Babys. Schon diese können Angehörige der eigenen Hautfarbe besser erkennen als die einer anderen Hautfarbe“ [8]. Und: „Doch wir unterscheiden nicht nur zwischen der eigenen Gruppe und fremden Gruppen, unsere Empathie scheint auch davon abhängig zu sein. Das haben Studien gezeigt, in der den Probanden Menschen in schmerzvollen Situationen gezeigt wurden. Das Ergebnis: Gehört der oder die Betroffene zur eigenen Gruppe, dann springen nicht nur Regionen im Gehirn an, die für Empathie zuständig sind, sondern auch die, die uns zum Handeln bewegen, vielleicht zum Helfen bringen“ [8]. Jetzt gilt es zu beweisen, das dass biologisch vorgegeben ist, also ungelernt bereits vorhanden ist, und nachträglich nur noch durch die Superstruktur konkretisiert wird. Hier hab ich ziemlich gewonnen, weil man unkontrovers nachweisen kann, das dass so ist [8-20]. Also sind Menschen biologisch konsenslos, intrinsisch und ohne Erfahrung die zuvor kommen musste darauf ausgelegt diskriminierend zu Denken [8-20]. Ob sie das am Ende tun oder ob sie es nicht tun ist dann eine Sache der Superstruktur. Die intrinsische Verlangung der Basis bleibt aber da. Machen wir es konkreter: die Beleidigung „dumm“ lässt sich neurolinguistisch und psycholinguistisch erklären durch kognitive Ökonomie, das was ich eben mit Diskriminierung angesprochen habe, und durch die evolutionäre Psychologie. Die kognitive Ökonomie diktiert, das nicht zu viel Aufwand auf ein Thema aufgebracht werden darf. Somit wird der Gegenstand als dumm abgewertet. Etwas als dumm abzuwerten hat mehr mit der kognitiven Ökonomie zu tun als mit der erfahrungsbasiernden Abwertung nach moralischem Maßstab (dumm = schlecht oder zumindest nicht-gut). Die kognitive Ökonomie ist teil der Basis.
+
+<blockquote>An welchem Punkt ist es nicht mehr die Basis, sondern die Superstruktur?
+</blockquote>
+Ich denke die Frage sollte beantwortet sein dadurch das ich sage: (1) Konsensfrei durch den Körper durchgeführt, (2) Ein passiver Teil der die menschlichen Wahrnehmung beeinflusst (3) unabhängig von der Superstruktur seine Wirkung findet.
+<blockquote>Bildet sich die moralische Basis rein instinktiv, ohne äußere Einflüsse?</blockquote>
+Die Frage setzt eine falsche Prämisse. Die Basis „bildet“ sich nicht, und sie ist auch nicht unbedingt instinktiv. Das sie sich ohne äußere Einflüsse bildet ist Teil ihrer Definition. Die Basis ist intrinsisch (angeboren), baut nicht nur auf Instinkten, sondern auf allem evolutionären.
+<blokckquote>Kann sie dann konkret sein?</blokckquote>
+Ja.
+<blockquote>Wenn grundsätzliche psychologische Anlagen auch als Moral bezeichnet werden, wie definierst du dann Moral?</blockquote>
+Ich habe nicht gesagt, dass grundlegende psychologische Anlagen als Moral zu bezeichnen sind. Ich sage, dass die Moral sich abhängig von ihr konstituiert. Moral wäre die Gesamtstruktur. Der Gegenstand Basis-Superstruktur als ein handelnder Körper und Subjekt zugleich ist der Gegenstand der Moral. Dieser bedingt sich dialektisch durch sein Objekt, das zu bewertende Geschehen, der in der Wahrnehmung stehende Gegenstand. Soviel zu den ersten Fragen.
+2.
+Diese Antworten sollten die Nachfragen beseitigen. Alles was darüber hinausgeht aus der zweiten Nachricht wird hier beantwortet:
+
+<blockquote>angeboren=instinktiv. Instinkte bilden sich nicht, die sind da.</blockquote>
+Halluzinierte Annahme.
+<blokquote>4) Mit Konkret meine ich: ein Arbeiter darf nicht von einem Kapitalisten ausgebeutet werden; oder: Ausbeutung ist falsch. Wenn Moral angeboren ist, dann müssten Menschen in urgesellschaften die selben Urteile Fällen wie Menschen im Kapitalismus.</blokquote>
+Wenn Moral angeboren wäre, dann ja. Aber das stimmt nicht und deshalb ist das auch nicht das Argument.
+<blockquote>Es sei denn 5) du meinst mit Moral etwas völlig anderes, als ich darunter verstehe. Du hast in deinem Text nicht beschrieben, was du unter Moral verstehst. Deshalb bitte ich dich, einmal Moral zu definieren, sonst kann kein Austausch stattfinden.</blockquote>
+Der Gegenstand Basis-Superstruktur als ein handelnder Körper und Subjekt zugleich ist der Gegenstand der Moral. Dieser bedingt sich dialektisch durch sein Objekt, das zu bewertende Geschehen, der in der Wahrnehmung stehende Gegenstand.
+<blockquote>Du versuchst aus meiner Sicht mit deinem Konzept mit Umwegen eine Ideenwelt zu rechtfertigen.</blockquote>
+Nein.
+
+3.
+In diesem Abschnitt gehe ich auf die Texte ein:
+
+<blockquote>Werte wie "man darf nicht töten" können nicht angeboren sein. Ein Gehirn kann von selbst kein Verständnis davon haben, was Mord bedeutet.</blockquote>
+
+Doch. Das ist nicht nur möglich, das ist auch so. Gefahrenwahrnehmung ist z. B. angeboren. Ein Kind braucht keine Erfahrungen um Angst zu haben. Neugeborene Kinder haben bereits Angstzustände. Wenn sie keine Fähigkeit für Schaden hätten, dann könnten sie keine Angst nach der Geburt verspüren. Angeboren sind: Reflexe, Höhenangst und Annäherungsängste. Die Angst die ein Kind direkt nach der Geburt verspürt ist Teils durch die Erfahrung und Teils angeboren [21]. Wir können nur wenig sagen darüber weil das Thema sehr schlecht studiert ist. Nur eine Studie [21] redet wirklich darüber. Du kannst diese These also nicht beweisen. Die eine wirkliche Studie die es dazu gibt sagt, es gibt bereits angeborene Ängste die unabhängig von Erfahrung sind. Diese spielen eine Rolle für die Superstruktur. Somit gibt es bei dem Thema Mord (physischer Schaden am Körper) eine Basis, die Teils in der Angst liegt. Mehr muss ich nach meinem Argument auch nicht beweisen. Die Basis kann auch klein sein.
+<blockquote>Ein Gehirn kann Ängste vor dem Tod vermitteln, oder Verlusterfahrungen. Aber die moralische Verurteilung des Mordens kann keine biologische Ausgangslage sein. Wie würdest du das evolutionär erklären? Glaubst du wirklich, ein Mensch der in völliger Isolation von der Gesellschaft aufwächst würde die selben konkreten ethischen Vorstellungen haben wie du und ich, ohne die Welt und das zwischenmenschliche und Sprache zu kennen?</blockquote>
+Hier ist wieder eine komplette Halluzination von meinem Argument. Du verwechselst meine Position mit der Position der Sozialbiologie, die ich Oben erwähnt habe. Deine Aussage hat nichts mit meiner Position zu tun. Ich habe davon gesprochen, dass Moral durch die Basis gehen muss und das die Basis sie beeinflusst. Du scheinst die Superstruktur komplett ignoriert zu haben. Wenn man die Superstruktur vollständig ignoriert, obwohl sie ein wesentlicher Bestandteil meines Argumentes der Moralbildung ist, dann würde die Kritik stimmen.
+<blockquote>Moral ist Idee und Gesellschaftliches Verhältnis. Das Gehirn selbst kann sie nicht allein erzeugen.</blockquote>
+Ab dieser Aussage wird deine Argumentation Pathologisch, da du die Halluzinationen wiederholst und ausweitest. Das Bewusstsein der Moral das ich beschriebe steht in Verbindung zu dem Objekt, welches durch die Basis UND die Superstruktur wahrgenommen wird. Wenn wir davon ausgehen, dass das Bewusstsein eines Menschen im Gehirn stattfindet, wie ich für wahrscheinlich halte, dann findet die Moral nur3 im Gehirn statt. Egal welche Ethik-Theorie wir verwenden, hat das nichts damit zu tun. Nach dir ist Moral „Idee“ und „Gesellschaft“. Das sind genau die Elemente die ich in die Superstruktur verordne.
+<blockquote>Du versuchst aus meiner Sicht mit deinem Konzept mit Umwegen eine Ideenwelt zu rechtfertigen.</blockquote>
+Diese Aussage hat für mich keinen Inhalt. Was soll das heißen?
+___________________________
+
+Empathie findet ihre Basis in der Biologie
+
+[1] Schlegel, M. (2013). Die Evolution der Empathie. Psychotherapie-Wissenschaft, 3(2), 90-102.
+[2] Vorbeck, M. M. (2021). Spiegelneurone–ein Konzept aus der Neurowissenschaft (Doctoral dissertation, lmu).
+[3] Cook, R., Bird, G., Catmur, C., Press, C., & Heyes, C. (2014). Mirror neurons: From origin to function. Behavioral and Brain Sciences, 37(2), 177–192. doi:10.1017/S0140525X13000903.
+[4] Hickok G. (2009). Eight problems for the mirror neuron theory of action understanding in monkeys and humans. Journal of cognitive neuroscience, 21(7), 1229–1243. https://doi.org/10.1162/jocn.2009.21189.
+[5] https://fse.studenttheses.ub.rug.nl/32274/1/bBIO_2024_IndyLopers.pdf.pdf.
+[6] https://www.quantamagazine.org/overexposure-distorted-the-science-of-mirror-neurons-20240402/.
+[7] Medicus, A. (2018). Die Neurobiogie der Empathie.
+
+Diskriminierende Sprache ist nicht erlernt, sondern stammt aus der Biologie des Menschen:
+
+[8] https://www.deutschlandfunkkultur.de/neuropolitik-gehirn-vorurteile-rassismus-klassismus-antisemitismus-sexismus-100.html.
+[9] https://www.psychologytoday.com/us/blog/trauma-resilience-and-recovery/202410/in-group-and-out-group-dynamics-a-psychological.
+[10] https://psychology.town/social/understanding-social-categorization-framework/.
+[11] https://thedecisionlab.com/biases/in-group-bias.
+[12] https://www.impactboom.org/blog/2024/01/31/selena-bartlett-on-unlocking-the-brains-potential-through-incidental-kindness-and-collaboration.
+[13] Han, Shihui. (2018). Neurocognitive Basis of Racial Ingroup Bias in Empathy. Trends in Cognitive Sciences. 22. 10.1016/j.tics.2018.02.013.
+[14] Gutsell, J. N., & Inzlicht, M. (2012). Intergroup differences in the sharing of emotive states: neural evidence of an empathy gap. Social cognitive and affective neuroscience, 7(5), 596–603. https://doi.org/10.1093/scan/nsr035.
+[15] Han, S. (). Neurocognitive Basis of Racial Ingroup Bias in Empathy, Trends in Cognitive Sciences, CellPress Reviews, https://psy.pku.edu.cn/docs/20181226142849692633.pdf.
+[16] https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2022.1059415/full.
+[17] Gutsell, J. N., & Inzlicht, M. (2012). Intergroup differences in the sharing of emotive states: neural evidence of an empathy gap. Social cognitive and affective neuroscience, 7(5), 596–603. https://doi.org/10.1093/scan/nsr035.
+[18] https://communities.springernature.com/posts/how-does-the-brain-classify-others-by-race.
+[19] https://socialbat.org/2016/01/08/is-the-ingroup-outgroup-bias-just-two-points-on-a-social-distance-spectrum/.
+[20] Park, J. H. und Jin, K. (2022). The sense of belonging reduces ingroup favoritism in children. Front. Psychol. 13:1059415. doi: 10.3389/fpsyg.2022.1059415.
+
+Angeborenheit der Angst
+
+[21] Thomas, E., Buss, C., Rasmussen, J. M., Entringer, S., Ramirez, J. S. B., Marr, M., & Wadhwa, P. D. (2018). Newborn amygdala connectivity and early emerging fear. Developmental Cognitive Neuroscience, 34, 100604. https://doi.org/10.1016/j.dcn.2018.07.001.
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="art-2" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('art-2')">&times;</span>
+            <div class="modal-body">
+                <div class="article-meta-tag">"Bioauthentizismus" Theorie</div>
+                <div class="article-text">
+Die Theorie beginnt mit der Annahme, dass Moral nicht etwas ist, das vollständig unabhängig vom menschlichen Organismus existiert. Moral ist keine rein abstrakte Struktur außerhalb des Menschen, sondern eine Eigenschaft biologischer Wesen mit bestimmten Gehirnen, Körpern, Emotionen und kognitiven Fähigkeiten. Sie entsteht aus dem Zusammenspiel zwischen der biologischen Grundlage eines Individuums, seiner Psychologie, seinen Erfahrungen, seiner kulturellen Umgebung und seiner bewussten Reflexion. Moral ist daher weder ausschließlich angeboren noch ausschließlich erlernt, sondern entsteht aus der Wechselwirkung zwischen Natur und Erfahrung. Die zentrale These dieser Theorie lautet: Eine moralische Überzeugung oder Handlung ist für ein Individuum dann moralisch richtig, wenn sie authentisch mit dessen eigener biologischer und psychologischer Moralstruktur übereinstimmt. Eine moralische Überzeugung ist für ein Individuum dann falsch, wenn sie nicht seiner tatsächlichen moralischen Struktur entspricht, sondern durch äußere Einflüsse, Manipulation, Ideologie, soziale Anpassung oder Selbsttäuschung entstanden ist. Dabei bedeutet „richtig“ nicht, dass diese Moral automatisch für alle Menschen universell gelten muss. Die Theorie unterscheidet zwischen universeller Moral und individueller Objektivität. Eine moralische Aussage kann objektiv für eine Person richtig oder falsch sein, ohne dass daraus folgt, dass sie für alle Menschen gleichermaßen gelten muss. Der Ausgangspunkt dieser Theorie ist eine Analogie zur menschlichen Sprache. Menschen werden nicht mit einer bestimmten Sprache geboren, aber sie besitzen biologische Voraussetzungen, die Sprache überhaupt ermöglichen. Die menschliche Biologie schafft bestimmte Grenzen und Möglichkeiten, während die Umwelt entscheidet, welche konkrete Sprache ein Mensch entwickelt. Ein Mensch wird nicht mit Deutsch oder Englisch geboren, aber er besitzt die Fähigkeit, eine Sprache zu erlernen. Moral funktioniert nach dieser Theorie ähnlich. Menschen werden nicht mit einem vollständigen moralischen System geboren, aber sie besitzen biologische Voraussetzungen für moralisches Empfinden und moralische Urteile. Diese Voraussetzungen umfassen unter anderem Empathie, emotionale Reaktionen auf Leid, soziale Bindungsfähigkeit, Fairnessinstinkte, Kooperationsbereitschaft, Aggressionsmechanismen und individuelle emotionale Veranlagungen. Diese biologischen Eigenschaften bilden die moralische Grundlage eines Menschen. Auf dieser Grundlage entwickelt sich eine moralische Superstruktur. Diese Superstruktur besteht aus kulturellen Werten, Religion, politischen Überzeugungen, philosophischen Ideen, Erziehung, sozialen Einflüssen und bewussten moralischen Entscheidungen. Die biologische Grundlage bestimmt nicht vollständig, welche moralischen Überzeugungen eine Person entwickelt, genauso wenig wie die biologische Sprachfähigkeit bestimmt, welche Sprache ein Mensch spricht. Sie schafft jedoch einen Rahmen, innerhalb dessen sich die individuelle Moral entwickelt. Die Beziehung zwischen biologischer Grundlage und moralischer Superstruktur ist daher entscheidend. Wenn die bewussten moralischen Überzeugungen einer Person mit ihrer tatsächlichen biologischen und psychologischen Struktur übereinstimmen, handelt die Person authentisch. Wenn die bewussten moralischen Überzeugungen jedoch nicht dieser Struktur entsprechen, sondern durch äußere Einflüsse oder Selbsttäuschung entstanden sind, handelt die Person unauthentisch. Daraus folgt, dass ein Mensch aufrichtig an eine moralische Aussage glauben kann und trotzdem falsch darüber liegen kann, ob diese Aussage tatsächlich seiner eigenen Moral entspricht. Dies führt zum Konzept der moralischen Falschbewusstheit. Eine Person kann durch Propaganda, soziale Erwartungen, Ideologien oder andere äußere Einflüsse moralische Überzeugungen übernehmen, die nicht ihrer eigenen tieferen moralischen Struktur entsprechen. Ein Beispiel wäre ein junger Mensch, der grundsätzlich Empathie besitzt, Gewalt ablehnt und intuitiv gegen unnötiges Leid eingestellt ist, aber durch extremistische Propaganda zu der Überzeugung gelangt, dass Genozid oder die Vernichtung bestimmter Menschengruppen moralisch richtig sei. Nach dieser Theorie ist diese Person moralisch falsch, nicht notwendigerweise deshalb, weil sie gegen ein universelles moralisches Gesetz verstößt, sondern weil ihre bewusste moralische Überzeugung nicht ihrer tatsächlichen moralischen Grundlage entspricht. Die Ideologie hat die eigene moralische Wahrnehmung verzerrt. Die Theorie behauptet daher, dass Moral objektiv sein kann, ohne universell zu sein. Klassischer moralischer Realismus behauptet, dass es objektive moralische Wahrheiten gibt, die unabhängig von einzelnen Menschen existieren und für alle gelten. Moralischer Relativismus behauptet dagegen, dass Moral vollständig von Kultur oder persönlicher Meinung abhängt. Bioauthentizismus nimmt eine Zwischenposition ein: Moralische Wahrheit existiert objektiv auf der Ebene des Individuums. Eine Person kann objektiv darüber falsch liegen, was ihre eigene moralische Natur tatsächlich ist. Eine hypothetische zukünftige Technologie könnte theoretisch die Beziehung zwischen den bewussten moralischen Aussagen einer Person und ihrer biologischen sowie neurologischen Struktur analysieren. Eine solche Maschine würde jedoch nicht entscheiden, welche Moral für alle Menschen gilt. Sie würde lediglich feststellen, ob die moralische Selbsteinschätzung einer Person mit ihrer tatsächlichen inneren Struktur übereinstimmt. Ein zentraler Bestandteil dieser Theorie ist daher die moralische Bedeutung von Authentizität. Es ist moralisch problematisch, moralische Überzeugungen zu vertreten, die nicht wirklich die eigene moralische Struktur widerspiegeln. Ein Mensch hat eine Verantwortung, sich selbst zu verstehen und seine bewussten Werte mit seiner tatsächlichen Natur in Einklang zu bringen. Moralische Integrität bedeutet deshalb, dass zwischen dem, was eine Person behauptet zu glauben, und dem, was tatsächlich ihre moralische Struktur ausmacht, eine Übereinstimmung besteht. Dies bedeutet jedoch nicht, dass alle authentischen Moralvorstellungen miteinander vereinbar sind. Unterschiedliche Menschen können aufgrund unterschiedlicher biologischer und psychologischer Strukturen unterschiedliche authentische Moralvorstellungen entwickeln. Moralische Konflikte entstehen daher nicht immer dadurch, dass eine Seite die Wahrheit erkannt hat und die andere Seite unwissend oder unehrlich ist. Manchmal stehen sich zwei tatsächlich unterschiedliche moralische Systeme gegenüber. Der Fall Jeffrey Dahmer stellt dabei eine der schwierigsten Herausforderungen für diese Theorie dar. Angenommen, eine Person wie Dahmer hätte tatsächlich eine biologische und psychologische Struktur, in der Mord und extreme Gewalt authentisch mit seinen inneren Neigungen übereinstimmen. Nach dieser Theorie könnte man sagen, dass sein Verhalten für ihn authentisch war. Daraus folgt jedoch nicht, dass andere Menschen verpflichtet wären, dieses Verhalten zu akzeptieren. Eine Person, deren eigene moralische Struktur stark auf Empathie, Solidarität, Schutz anderer Menschen und Verhinderung von Leid ausgerichtet ist, kann ebenso authentisch dazu motiviert sein, Dahmer aufzuhalten. Damit können zwei Aussagen gleichzeitig wahr sein: Dahmer kann entsprechend seiner eigenen authentischen Moral handeln, und eine andere Person kann entsprechend ihrer eigenen authentischen Moral handeln, indem sie ihn stoppt. Der Konflikt besteht dann nicht notwendigerweise zwischen einer moralischen und einer unmoralischen Person, sondern zwischen zwei inkompatiblen moralischen Strukturen. Authentizität bedeutet nicht, dass andere Menschen die Handlungen einer Person akzeptieren müssen. Sie beschreibt lediglich, ob eine Handlung tatsächlich aus der eigenen moralischen Struktur hervorgeht. Dasselbe Prinzip gilt für politische und ideologische Konflikte. Wenn eine Person tatsächlich eine faschistische Weltanschauung besitzt und diese vollständig ihrer biologischen und psychologischen Struktur entspricht, dann kann diese Überzeugung authentisch sein. Trotzdem kann eine andere Person, deren eigene authentische Moral antifaschistisch ist, weiterhin moralisch gerechtfertigt sein, diese Person und diese Ideologie zu bekämpfen. Der Antifaschist muss nicht behaupten, dass der Faschist eigentlich kein echter Faschist sei. Er kann anerkennen, dass die Überzeugung echt ist, und sie trotzdem ablehnen, weil die Ablehnung des Faschismus Teil seiner eigenen authentischen Moral ist. Dies zeigt den Unterschied zwischen Verstehen und Akzeptieren. Eine Person kann verstehen, dass eine andere Person authentisch handelt, ohne diese Handlung gutzuheißen. Das Erkennen der Authentizität einer fremden Moral bedeutet nicht, dass man diese Moral übernehmen oder tolerieren muss. Die Theorie trennt daher zwei Fragen, die in vielen ethischen Systemen vermischt werden. Die erste Frage lautet: Ist eine moralische Überzeugung authentisch für die Person, die sie besitzt? Die zweite Frage lautet: Unterstütze oder lehne ich diese moralische Überzeugung aufgrund meiner eigenen authentischen Moral ab? Ein Mensch kann erkennen, dass eine andere Person wirklich so denkt, und trotzdem moralisch verpflichtet sein, dieser Person entgegenzutreten. Zusammenfassend behauptet Bioauthentizismus, dass Menschen biologische Wesen sind, deren moralische Fähigkeiten aus ihrer biologischen und psychologischen Struktur entstehen. Diese Struktur bildet die Grundlage der Moral, während Kultur, Erfahrung und bewusste Reflexion eine moralische Superstruktur bilden. Diese Superstruktur kann entweder die eigene biologische Grundlage ausdrücken oder sie verzerren. Authentische moralische Überzeugungen sind diejenigen, die tatsächlich der eigenen moralischen Struktur entsprechen. Inauthentische moralische Überzeugungen entstehen, wenn eine Person von ihrer eigenen moralischen Grundlage entfremdet wird. Moral ist nach dieser Theorie weder ein äußerer Befehl, der allen Menschen von außen auferlegt wird, noch eine vollkommen subjektive Meinung ohne objektive Grundlage. Moral ist eine objektive Eigenschaft biologischer Individuen, die aus dem Zusammenspiel von biologischer Natur, persönlicher Erfahrung und bewusster Selbstreflexion entsteht.
+
+                </article>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="art-3" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('art-3')">&times;</span>
+            <div class="modal-body">
+                <div class="article-meta-tag">MaterialSichtung</div>
+                <h2>32-26</h2>
+                <div class="article-text">
+Inhalt:
+<blockquote>
+1. Außenpolitik
+	(1.1) UN Security Council Resolution 2827
+	(1.2) Iran – USA Krieg
+	(1.3) Ukraine Krieg
+	(1.4) Russland
+	(1.5) Gaza
+	(1.6) Saudi-Arabien, Türkei und Pakistan schließen Verteidigungspakt
+	(1.7) Sudan
+	(1.8) Südsudan
+	
+2. Innenpolitik
+	(2.1) Sprengstoff-Drohne am Flughafen Leipzig/Halle
+	(2.2) Rente: Streit innerhalb der Koalition
+	(2.3) AfD startet Landtagswahlkampf in Mecklenburg-Vorpommern
+	(2.4) Innere Sicherheit und Migration bleiben zentrale 	Regierungsthemen
+	
+3. Aktuelle Bücher
+	(3.1) Kohei Saito - Degrowth
+	(3.2) Raju J. Das - Theories for Radical Change: Key Texts from the 	Political Economy of Marx and 	Lenin
+	(3.3) Ernesto Gallo - The Era of Authoritarian Neoliberalism: The Rise 	of Technocrats, Nationalists and 	Autocrats
+	(3.4) Thomas Birkner - Medialisierung und Mediatisierung
+</blockquote>
+	
+<p>(1)
+UN Security Council Resolution 2827
+</p>
+Die aktuelle UNSCR ist wirklich sehr kurz (eine gute Nachicht könnte man meinen). Man kann sie also in Gänze zitieren:
+"Adopted by the Security Council at its 10204th meeting, on 29 July 2026 The Security Council, Recalling its resolution 2745 (2024), Reaffirming its strong commitment to the sovereignty, independence, unity and territorial integrity of the CAR, and recalling the importance of the principles of non-interference, good-neighbourliness and regional cooperation, Acknowledging the progress made in the Central African Republic with regard to the peace process, the elections, and the extension of State authority, Determining that armed groups operating in the CAR constitute a threat to international peace and security in the region, Acting under Chapter VII of the Charter of the United Nations, 1. Decides to extend, until 31 July 2027, the measures as set out or extended in paragraphs 2 and 4 of resolution 2745 (2024), decides to extend, until 31 August 2027, the mandate of the Panel of Experts as set forth in paragraph 6 of resolution 2745 (2024), and reaffirms paragraphs 1, 3, 5, and 7 through 12 of resolution 2745 (2024), noting that references to midterm and final reports of the Panel of Experts should be updated to 31 January 2027 and 15 June 2027, respectively; 2. Decides to remain actively seized of the matter" [1].
+Es geht also um "CAR", also die Zentralafrikanische Republik. Hier das Argument: Dort geht es um politische Machtkämpfe, bewaffnete Rebellengruppen, ethnisch-religiöse Konflikte und Armut. Wir können von dem ethnisch-religiösen Unsinn absehen und die realen materiellen Bedingungen betrachten. Die Zentralafrikanische Republik war Teil von der Kolonie Französisch-Äquatorialafrika. Nach der formalen Unabhängigkeit von Frankreich war das Land aber immernoch nicht wirtschaftlich unabhängig von dem Westen. Durch ungeleichen Austausch und den Mangel and Produktivkraft in dem Land hat das Land keine Chance sich wirklich zu behaupten und unterliegt somit Machtkämpfen. In ZAR gibt es kaum eine nationale Kapitalistenklasse und auch kaum ein Industrieproletariat. Stattdessen gibt es staatliche und politische Eliten und ausländisches Kapital. Die große Mehrheit der Bevölkerung lebt von Subsistenzlandwirtschaft, Viehzucht oder informeller Arbeit. Die Rebellion ist hierbei Ausdruck des materiellen Konfliktes. Rebelliongruppen wie Séléka sind also nicht nur religiöse Gruppen, sondern eben auch Gruppen innerhalb des Klassenkampfes. Man kann sich den Wirtschaftskreislauf bei den Goldabbaugebieten im ZAR anschauen: Der Eigentümer hat Gold. Dieses Gold bringt ihm Einkommen, dadurch das er es auf dem Markt verkauft. Mit dem Geld kauft er sich Waffen. Mit den Waffen kann er Territorium kontrollieren. In diesem Territorium ist Gold. Das Gold kann er jetzt wieder abbauen. Somit ergibt sich, wie uns bekannt, eine komplexere Form von G – W – G'. Über diesem Prozess der Kapitalakkumulation liegt der Überbau der Religion und der Ethnie, der dort ausgetragen wird. Durch die materielle Konkurenz um Land, Ressourcen und Macht entsteht politische Mobilisierung und aus dieser heraus entsteht eine verstärkung der religiösen Identität. Der materielle Konflikt wird zu einer gesellschaftlichen Konfliktlinie, die eigentlich halluziniert ist.
+
+<p>(2)
+Iran – USA Krieg
+</p>
+Der Krieg zwischen der Imperialmacht USA und dem Iran unter dem Mullah Regime besteht weiterhin. Das Handelsblatt geht auf ihn unter dem Titel "US-Generalstabschef Caine sucht offenbar Ausweg aus Iran-Krieg" ein [1]. Caine ist ein wichtiger militärischer Berater der US-amerikanischen Nation und findet seine Funktion als Instandhalter des imperialen Staatsapparates der USA unter der Trump-Administration. Caine steht ganz oben in der Rangliste die US-amerikanischen Interessen militärstrategisch durchzusetzen. Zuerst war Caine ein leitender Militärvertreter der CIA, eine Organisation die darauf spezialisiert großenteils unschuldige Menschen in Volterkällern in Guantanomo Bay zu erniedrigen und jahre Lang mit verschiedensten Methoden zu foltern. Zu den Aufgaben der CIA gehört auch, die militärischen Angriffe auf fremde Länder, die gegen US-amerikanische Kapitalinteressen gehen, sowie den Aufbau von faschistischen Diktatoren in sozialistischen Ländern, die zum Sturz interessenferner Politiker dienen soll (siehe Pinochet). Mit dem extraordinary rendition-program spezialisiert sich die CIA darauf, Menschen in fremde Länder zu schicken um sie dort vorbei am US-Folterverbot zu Foltern. Das ist also der Werdegang von Caine. Jetzt ist er aufgestiegen in eine Position, wo er die Gewalt der US-amerikanischen Nation im Iran fortführen kann. Bzgl. der aktuellen Konfliktsituation schreibt das Handelsblatt
+"Der Angriff erfolgte, während der Iran die Wiedereröffnung der Seestraße von der Erfüllung eigener Bedingungen abhängig macht. Die Revolutionsgarden erklärten, eine Freigabe der Meerenge hänge von der Zustimmung der USA zu iranischen Forderungen ab. „Die Wiedereröffnung der Straße von Hormus unterliegt den spezifischen Mechanismen und Bedingungen der Islamischen Republik Iran“, zitierte die Nachrichtenagentur Tasnim den Sprecher der Garden, Hussein Mohebbi. „Sie steht nicht im Zusammenhang mit den Verhandlungen zwischen dem Iran und Oman" [1].
+Das sollte zuerst nicht isoliert von den anderen Ereignissen betrachtet werden1. Eine bürgerliche Einordnung kann und will schnell den Iran als Erpresser darstellen, wobei die Kräfteverhältnisse geschickt ignoriert werden. Hinter dem Verhalten des Irans stehen strategische Begründungen. Da die USA in all ihrer militärischen Vollständigkeit strategisch und somit nicht moralisch handelt ist der Iran, der angegriffen wurde, zu einer strategischen Antwort gezwungen. Um das zu verstehen muss man verstehen, dass der Konflikt kein gleichberechtigter Konflikt ist. Die USA besitzt weit mehr Material als der Iran, womit dem Iran nur wenige Mittel zum Wiederstand bleibt. Die wenigen Mittel die der Iran als Gegenwehr hat werden genutzt.
+Wie DER SPIEGEL schreibt hat die Trump-Administration bald ein ernsthaftes Problem mit ihrem Kriegsmaterial [2]. Die Erschöpfung der Kriegsmaterialen zeigt auf, dass der Imperialismus der Länder der kapitalistischen Vorherrschaft direkt an ihre Produktivkraft gebunden ist. Um weiter globale US-amerikanische Kapitalinteressen zu schützen müssen sie ihren Staatshaushalt noch weiter in die Militärausgaben geben. Ein Sozialstaat gibt es in den USA ja sowieso nicht, also werden die US-amerikanischen Arbeiter es sowieso nicht merken, wenn die Früchte ihrer Arbeit durch Steuern nicht in ihre Rente, sondern in die Pullverisierung von iranischen Schulkindern geht [3, 4, 5, 6, 7]. Der militärisch-industrielle Komplex ist ein spannendes Phänomen der spätkapitalistischen Gesellschaft. Der Imperialismus als letzes Stadium des Kapitalismus [8] erzeugt im Krieg eine enorme Nachfrage an Rüstungsgütern und somit Absatzmöglichkeiten für Rüstungsunternehmen. Für den Krieg ist es eine Einsatzmöglichkeit, für das Kapital eine Profitgelegenheit. Es gibt hier unterschiedliche Wege wie man die imperiale Kriegsmachine am laufen halten kann: im Faschismus hat man einfach das Lumpenprolitariat (Arbeitslose und Obdachlose) dazu gezwungen in Rüstungsunternehmen das Material herrzustellen. Das konnte man dann sozial begründen in dem man sagt, man habe sie ja schließlich aus der Arbeitslosigkeit befreit. Im Sozialismus wurde das Militär einfach planwirtschaftlich geplannt. Im bürgerlichen Staat, also in einer liberalen Gesellschaft bracht man fast garkein Zwang. Die Unternehmer gehen auf den Markt mit ihrem Angebot an Kriegsware (gennant "Rüstungsware"). Diese lässt sich gut verkaufen, wenn der Staat sie den Unternehmen abnimmt. Solange der bürgerliche Staat also genug Geld durch Steuer generieren kann um von seinen oder fremden Unternehmen die Ware einzukaufen kann er den Krieg weiterführen. Wenn er glück hat, dann generiert das gewaltsame einsetzen für seine internationalen Interessen neues Kapital im Ausland, wodurch Kapital akkumuliert wird, welches Profit abwirft womit der Staat die Militärausgaben decken kann, und drüber hinaus auch noch extra Profit schlagen kann. Meistens klappt dieser Plan für die USA. Die Arbeiter im eigenen Land produzieren einen Tauschwert. Dieser Wert wird verkauft gegen Geld. Dieses Geld nimmt der Staat sich durch Steuern. Diese Steuern nutzt er um sich Waffen zu kaufen. Diese Waffen nutzt er um gewaltsam sich im Ausland Kapital zu schaffen. Dieses Kapital akkumuliert sich und generiert Geld wie bei Monopoly. Dieses Geld geht in die nationale Wirtschaft. Irgendwann, wenn man Glück hat, übersteigt der Geldwert des militärisch eingerichteten Kapitals die Kosten der Militärinvestition und die USA macht Profit. Super. Leider beißt sich die Trump-Administration grade auf die Lippe, da das eingerichtete Kapital nicht kommen will. Der Iran ist leider nunmal zu geizig und zu bockig um ihr nationales Kapital, also ihre Existenzbedingung, einfach an die USA abzutreten. Schade. Jetzt muss die Investition in einen Angriffskrieg entweder gestoppt werden und das Minus muss toleriert werden, oder man muss die Steuerkasse plündern und drauf hoffen das man doch noch irgendwie im Iran Kapital einrichten kann, was unter den Eigentumsbedingnugen der USA steht. Diese Frage ist grade das große Thema in Camp-David und damit auch Thema für DER SPIEGEL.
+<p>
+(3)
+Ukraine Krieg
+</p>
+Wenn Sie unser Argument bzgl. des Ukraine Konfliktes in Gänze verstehen wollen, dann schauen sie unser Video "Warum ich gegen die Wehrpflicht bin: Das Argument" [1]. Dort wird unsere Antimilitaristische Position auf knapp 1.5 Stunden ausgearbeitet und begründet. Falls sie also im weiteren Verlauf dieses Artikels einen Bürgerschreck erfahren sollten, sollten sie bevor sie in Pöbelei ausweichen das Argument lernen.
+Die Zwangsrekrutierung der ukrainischen Zivilbevölkerung geht weiter. Diese Praxis kennen wir bereits aus älteren Artikeln [2, 3, 4, 5]. Dieses Gesetz wurde April 2024 eingeführt und dient dazu, ukrainische Zivilisten gewaltsam dazu zu zwingen an die Front geschafft zu werden. Zelenskyy sagt zwar selber "A nation has land, and it's very important for your identity, but the people are the most important" [6]. Also die Ukrainier sind wichtier als das Land und deshalb werden sie gewaltsam von dem Staat davon abgehalten an den sichersten Ort der Ukraine zu gelangen (West-Ukraine) und gewaltsam dazu gezwungen an den gefährlichsten Ort in der Ukraine zu kommen (Ostfront). Zelenskyy ist also nachwievor ein Lügner. Das 2024er Gesetz ist immernoch in Kraft und die Zwangsmobilisierung wird weiterhin, vor allem in Kyev durchgesetzt. Anstatt des den Ukrainern, um die sich Zelenskyy ja so kümmert, in Sicherheits zu bringen oder ihnen zu helfen sich zu schützen zwingt er sie in den Schützengraben. Das ist ein patriotischer Staatsmann aus dem Bilderbuch. Aber wenn Zelensky "unser Mann" wäre, dann würde er diese Entscheidungen doch abwählen lassen, oder? Tatsächlich wurde geschickt dafür gesorgt, dass die sonst eh schon wirkungslosen Wahlen jetzt gar keine Chance mehr bekommen sollen. Korruption hat de facto freien Weg2, Wahlen sind jetzt sowieso egal [7] usw. Alles außer die Ukraine ihr Interesse und ihren Willen [8, 9] zu erlauben, dass Land sicher zu verlassen. Knapp die Hälfte der Ukrainer wollen nicht mehr weiter das Land verteidigen [siehe Umfrage aus 9], dass sie in den Krieg zwingt, scheiß drauf, dann dürft ihr halt nichtmehr ausreisen und wenn ihr nicht freiwillig für "euren" Staat eintretet dann gibt es halt eine Pflicht. Jetzt zum Gegenstand: DER SPIEGEL schreibt als Titel:
+"Ukraine meldet Angriffe auf zwei Raffinerien – mehrere Tote bei russischen Attacken" [10].
+Bei dieser Art von Kriegsführung muss man sich fragen, wem der Krieg dienstlich ist. Die Ukraine greift an. Russland wird provoziert. Russland schlägt zurück. Der Schlag trifft ukrainische Zivilisten. Die Ukraine ist provoziert. Die Ukraine schlägt zurück. Alles geht von vorne los. Die Ukraine würde sagen: wir müssen angreifen, damit Russland geschwächt/abgeschreckt ist, und somit nicht mehr angreift. Also wir können unsere Bevölkerung nur schützen in dem wir Russland angreifen. Das müsste man jetzt prüfen. Werden die russischen Angriffe geringer je mehr die Ukraine angreift und werden die russischen Angriffe mehr, je weniger die Ukraine militärisch dagegen tut? Sofern das stimmt sollte die Strategie aufgehen. Empirisch betrachtet können wir das nicht aus dem bisherigen Kriegsgeschehen ableiten. Hier sind die Zahlen [11]. Sie sagen aus [12]: die russische Kriegsführung scheint sich wenig um Gegenangriffe zu kümmern, da sie ihre eigene Militärstrategie verfolgen. Also es lässt sich nicht ableiten, dass die ukrainische Kriegsführung irgendwie die Ukrainer langfristig schützen würde. Besser noch: Russland hat häufig ukrainische Angriffe als direkten Grund genommen um die Ukraine anzugreifen. Es macht also erst einmal den Eindruck, als würde die ukrainische Strategie keine Resultate erzeugen und sogar manchmal kontraproduktiv sein. Soviel zum zweiten Argument. Machen wir also weiter mit der Situation in Browary. Dort sind nach russischen Angriffen drei Menschen totgeschlagen worden. Der Ort ist strategisch günstig für Russland, da er nahe Kiew liegt und die Stadt logistisch anbindet. Nicht nur das, auch dadurch das der Ort so nahe an der Hauptstadt liegt soll vermutlich auch die ukrainische Bevölkerung terrorisiert werden. Aus diesen Orten wird auch Evakuiert von z. B. den „White Angels“ und den „Phönix“ [13]. Für direkt betroffene hilft der Staat also. Das wollten wir einmal erwähnt haben. Jetzt zum dritten Argument. Die TAZ schreibt als Überschrift:
+"US-Senat stimmt für neue Sanktionen gegen Russland: Eine US-Parlamentskammer ringt sich zu potenziell folgenschweren Sanktionen gegen Russland durch. Kurz nach dem Votum gibt es neue Luftangriffe auf die Ukraine" [14].
+Wir wollen jetzt also halbwegs kurz über das Argument für Sanktionen reden. Das Argument geht als Syllogismus etwa so: (1) Wir wollen Russland schwächen, (2) Sanktionen Schwächen Staaten, (3) Deshalb sollten wir Russland sanktionieren. Über die Prämisse (1) müssen wir uns nicht streiten. Dass ist klar. Wir haben aber einen Dissens mit (2) und (3). Also ersteinmal fragen wir uns, ob Sanktionen tatsächlich Wirksam sind. Diese Hinterfragung geht schließlich schon weit in die bürgerliche Argumentation hinein, nur ist sie dort anders begründet. Ein Argument ist, dass Sanktionen kurzfristig Schläge setzen können, aber langfristig einfach nur das Umbauen der russischen Wirtschaft erzeugt, wodurch sich die russische Wirtschaft einfach wieder neu stabilisiert. Man kann die Debatte vom spezifischen jetzt schon in das Allgemeine übertragen und sagen: das ist das Problem des Pazifismus. Entweder man gibt auf, oder man verwendet Strategie. Strategie bedeutet aber, alles machen was zum Sieg führt. Wenn Deutschland etwas machen wollen würde, dann würden sie die Bundeswehr in die Ukraine schicken. Das wäre die einzige wirkliche strategische Wahl, da es die stärkste Waffe ist. Oder, sie machen nicht mit. Das Argument hier wäre: Sanktionen, dass ist eigentlich nur Gewissenssache. Man will ja helfen, aber für einen militärischen Einschritt reicht es dann auch wieder nicht. Dieses Argument scheint überzeugend. Bzgl. (3): sollten WIR das machen? Also in Bezug auf Deutschland? Wir gehen jetzt wieder von dem Allgemeinen (Sanktionen schwächen Staaten) in das Spezifische: sollte Deutschland jemanden sanktionieren? Da kommt dann die Frage dazu: was macht das mit Deutschland, wenn wir kein Billigöl mehr von Russland kauft? Wenn man sich um die deutsche Wirtschaft kümmert ist das also kurzfristig schlecht. Man kann hier nur sagen: langfristig ist das aber gut, weil wenn es der EU gut geht, geht es auch der deutschen Wirtschaft gut. Also wieder ein Investment denken. Beides kann am Ende von dem deutschen Staat argumentiert werden. Beides stützt aber darauf, das Sanktionen was bringen. Das Argument müsste zuerst aufgestellt werden.
+<p>
+(4)
+Russland
+</p>
+Über Russland muss sich wohl wenig gestritten werden. Putin ist entweder ein Diktator und wenn man daran nicht glaubt dann ist er halt nunmal trotzdem ein Anführer eines extrem autoritären Regimes welches durch Staatspropaganda ihre Bevölkerung in den Krieg zwingt. Nicht nur wird die eigene russische Bevölkerung in den Krieg gedrängt, sondern der Krieg ist auchnoch sinnlos. Warum Putin den Krieg angefangen hat – ob durch Dummheit, durch Hass oder weiteren idealistischen Gründen oder aus materiellem Sachzwang bzw. wirtschaftlichen Gründen – wie auch immer. Es ist im Endeffekt egal und ändert nichts an dem Verbrechen gegen die Menschheit das Putin mit seinem unprovuzierten Angriffskrieg auf die Ukraine begannen hat und immernoch beginnt. Zum Glück hat die deutsche Politik und ihre Unternehmen nicht solch starke wirtschaftliche Verbindungen zu Russland, dass es in Deutschland eine ernstgemeinte Debatte gibt, die davon ausgeht, dass Russland hier in irgendeiner Form im Recht wäre. Dieser Artikel wird also langweilig, da wir eigentlich keinen Dissens haben. Elende Boulevardblättchen wie Compact und die Junge Freiheit haben zu dem Thema zwar auch grammatisch richtige anneinanderreihungen von Sätzen zu bieten, lohnen sich aber nicht der Kritik. Wir machen also weiter.
+<p>
+(5)
+Gaza
+</p>
+Über Gaza können wir jedoch viel schreiben. Zuerst ein paar grundlegende Punkt und dann zu dem aktuellem. Der deutsche Präsdent F. W. Steinmeier ruft zur Solidarität mit Israel auf [90]. Die Frankfurter Allgemeine Zeitung berichtet [90] über das Thema in einem Artikel. Steinmeier ist bei der Eröffnung einer Synagoge in Potsdamm eingeladen. Er wird in dieser "dazu aufgefordert [...]" [90] die "[...] Solidarität mit Israel nicht zu schmälern" [90]. So schreibt die FAZ. Weiter schreibt die FAZ: "Dass Israel sich gegen einen brutalen Terroranschalg der Hamas wehre, sei zu sehr in den Hintergrund getreten" [90]. Eine Meinung, die den laufenden Genozid verharmlost und eine Solidarität mit dem palästinensischen Volk überschreibt. Noch dazu ist die Aussage, Israel würde militärisch so vorgehen, wie sie es tun, weil sie sich gegen den 07. Oktober verteidigen faktisch unwahr. Verkennen tut es auch, dass Israel bereits Jahrzehnte vor dem 07. Oktober die palästinensische Bevölkerung unter einer inhumanen Besatzung hält und andauernd seit 1948 militärisch stark attackiert. Auch die militärischen Aggressionen von der israelischen Regierung unmittelbar vor dem 07. Oktober, bei denen ätliche Zivilisten ums Leben kamen ignoriert Steinmeier. Steinmeier erwähnt außerdem die brutalität des Anschlages. Das der Anschlag brutal war ist richtig. Steinmeier ist allerdings nicht konsequent in der Anwendung von Adjektiven wie "brutal", da er die israelischen Bombenanschlage auf Krankenhäuser oder Bodenangriffe der IDF nicht als brutal beschreibt, wenn er sie überhaupt erwähnt. Weiter spricht Steinmeier darüber, dass auch, so die FAZ, "Trauer über die palästinensischen Opfer auch im öffentlichen Raum zu zeigen [...]" erlaubt sein soll, das "[...] aber die Grenze sei dort überschritten, wo Verzweiflung zur Hetze werde, zu blankem Hass, im schlimsten Fall zu Gewalt gegen Juden". Die Aussrichtung dieses Narrativ beruht auf einer Doppelmoral, die den Staat Israel als per-se gut ansieht, und die arabische Gegenseite als generalverdächtig. Trauer über die Opfer des 07. Oktober ist, nach dieser konkreten Formulierung, immer gut, und Trauer über den Genozid in Gaza ist an sich erst einmal in Frage zu stellen. Jemand der für die israelischen Opfer trauert ist ein guter Mensch und jemand der über die palästinensischen Opfer trauert ist ein Verdachtsfall von Antisemitismus, Dhjihadismus, Terrorismus und Formen des Hass. Was Steinmeier nicht anspricht ist, dass es viele Instanzen gibt, bei denen Israel-Sympathisant:innen sich menschenverachtend, rassistisch und islamophob verhalten haben. Wir sehen hier also eine Doppelmoral. Die italienische Regierung unterstützt Israel, auch durch Waffenlieferungen, wärend die italienische Öffentlichkeit Palästina-solidarisch ist. Konkreter: die Solidarität bezieht sich vor allem auf das Schiff 'Gaza Freedom Flotilla'. Die Flotilla, ein unbewaffnetes Helferschiff das Hilfgüter nach Gaza liefern soll, wurde inzwischen von der IDF angegriffen worden. Die IDF hat das unbewaffnete Hilfsschiff mit einer gruppe bewaffneter Soldat:innen überfallen und die friedlichen Mitglieder:innen der Flortilla festgehalten. Unter der Mitglieder:innen der Flortiller ist die Aktivisten Greta Thunberg. Thunberg wurde von der IDF gewaltvoll überweltigt und sie in eine Zelle transportiert. Nach dem Guardian hat das Außwärtige Amt von Schweden Kontakt zu Thunberg und berichtet davon, dass Thunberg zur Zeit Wasser- und Essensmangel in israelischer Gefangenschafft erlebt [5]. Thunberg wurde dazu gezwungen, sich mit der israelischen Flagge fotographieren zu lassen [5, CN]. Alle anderen Bote der 'Global Sumud flotilla' wurden von der IDF in internatonalen Gewesser illegal aufgehalten [5, 6]. Israel hat inzwischen Thunberg und 160 andere Aktivist:innen nach Griechenland deportiert [6]. Der Generalstreik wurde mit dem Namen 'in defence of the flotilla' eingeleitet [7]. Die Italian General Confederation of Labour (CGIL) spricht von 'stop the genocide' [7]. Italiens Medien sind zu einem großen Teil privatisiert und gehören der Familie des Premieministers Silvio Berlusconi. Dieses Medienkonglomerat ist eng mit Netanyahu verbunden [2]. Die öffentlichen Medien in Italien sind Subjekt für das Propaganda Modell [3]. Meloni übernahm Oktober 2023 die Gaza-Position der EU, welche durch die israelische Lobby diktiert wird. Inzwischen ist der Genozid in Gaza so weit fortgeschritten, dass italiens Außenminister sich dagegen geäußert hat. Italien liefert trotzdem weiter Waffen an Israel [1]. Am 22. September haben die Hafenarbeiter:innen einen nationalweiten Streik gegen den Krieg in Gaza organisiert. Organisiert wurde dieser Generalstreik durch sog. 'grassroots unions' und solidarische Netzwerke. Die italienischen Gewerkschaften hatten sich neu organisiert und zu einem Generalstreik aufgerufen. Diese Streike effektieren den öffentlichen Nahverkehr in Italien. Zusätzlich zu den Streiks fanden mehrere große Demonstrationen statt. In Rom waren es 300.000 laut den Organisierenden und 'Hundreds of thousands' nach Al Jazeera [4, 7]. Auf der Demonstration wurde der Genozid in Gaza anhand von Transperenten und Schildern thematisiert. Der 'BR24' stellt die Bezeichnung der Situation in Gaza als 'Genozid' als abwägig dar: "In Mailand hielten die Streikenden Banner hoch, auf denen sie ihre Solidarität mit der Gaza-Hilfsflotte zum Ausdruck bringen und einen Stopp des - wie sie es nennen - "Völkermords in Gaza" fordern" [4]. Diese Formulierung dient dazu Israel's Kriegsverbrechen unbewertet zu lassen, da Deutschland im Moment eine Israel-freundliche Politik führt, und daher keine Assoziation mit dem Gaza-Genozid haben darf. Die Mobilisierung fand in jeder Alters- und generellen Lebensdemographie statt [7]. Zusätzlich zu der CGIL ist auch das 'Palestinian Student Movement' unter der Leitung von Maya Issa am Mobilisieren beteiligt [7]. Um den Widerstand gegen die israelische Kriegsführung zu unterbinden hat der italienische Staat zu erst zu Polizeirepressialen gegriffen (Polizeigewalt, Einschüchterung durch Beamtenpräsents etc.). Als nächster Schritt haben die öffentlichen rechtlichen Medien in Europa damit begonnen die Demonstrationen zu kriminalisieren. Die öffentlich Rechtlichen Medien haben versucht die Proteste zu kriminalisieren und haben ihre größe durch unterschätze Zahlen versucht kleinzureden [8, 9]. In einem Tagesschaubericht vom 04. Oktober wird bereits im erseten Satz verzweifelt versucht den Widerstand mit Hamas-Unterstützung zu verbunden [9]. Hierdurch wird die legitimität der Palästina Solidarität aktiv versucht abgeschwächt und als Terrorismus dargestellt zu werden. Die Tagesschau erwähnt kurz die Route der Demonstration und versucht direkt im nächsten Satz die gesamte Demonstration (mit über 100.000 Teilehmenden) als jhadistisch und terroristisch zu degradieren und zu kriminalisieren. "Die Nachrichtenagentur Ansa berichtete, es seien bei dem Marsch auch Fahnen der Terrororganisation Hamas sowie der libanesischen Hisbollah-Miliz geschwenkt worden" [9] so die Tagesschau. Diese Methode öffentlichen Protest als illegitim darzustellen und aus einer gefälschten Neutralität heraus auf zu verurteilen ist eine Standardmethode der etablierten Medien. Es werden hier die 5-10 aus der Reihe tanzenden Personen missbraucht um die gesamte Bewegung, die mit Hamas oder Hizbollah nichts zutun hat, schlecht zu reden. Diese illegitime und ungerechte Methode die Solidarität mit den zivilen Opfern in Gaza mit der Unterstützung von Terrorismus gleichzusetzen um die legitime Bewegung somit zu schädigen entläd sich in der Tagesschau im nächsten Satz: "Demnach trugen einige Demonstranten auch ein Spruchband mit dem Satz: "7. Oktober - Tag des palästinensischen Widerstands." Am 7. Oktober 2023 verübten die Hamas und weitere Extremisten im Süden Israels ein beispielloses Massaker an Zivilisten mit etwa 1.200 Toten" [9]. Hier verwendet die Tagesschau den 07. Oktober als universal geltendes Mittel um jeglichen Terrorismus der israelischen Regierung und die andauernde Hungersnot in Gaza, sowie das durchgehende bombadieren des Gaza-Streifens, sowie die gewaltvolle übernahme der Westbank durch die israelische Regierung zu rechtfertigen. Das Massaker des 07. Oktbers wird hier als 'beispiellos' beschrieben, wärend der Fakt, dass die Israelische Armee jeden Tag die Menge einer Schulklasse im Gazastreifen ermordet nicht erwähnt wird, und die Empörung die aus diesem Fakt entsteht als illegitim darstellt wird. Selbst nach Jahren der gezielten Aushungerung, durchgängigen verhältnisslosen bombadierung und dem Mord an über 100.000 Palästinenser:innen, darunter die meisten Kinder, Neugeborenen und Frauen, spielt für die Tagesschau ausschließlich nur der 07. Oktober eine Rolle, wärend der nicht zu übersehende wahre Grund der Demonstration, nämlich die Solidarität mit der Flotilla, systemisch ignoriert wird. Die illegitime Fehldarstellung der Tagesschau fährt im nächsten Satz fort, indem sie die unverhältnissmäßigen Gewaltausschreitungen der Polizei als "Zusamenstöße zwishcen Demonstranten und der Polizei" beschreibt [9]. Die staatlichen Repressionen und die konkrete Polizeigewalt werden hier als fairen Konflikt oder sogar als Reaktion auf Krawall von gewaltbereiten Demonstrant:innen dargestellt. Die Demonstrationen verliefen zum größten Teil friedlich, wärend die Polizei in den passiven Teilen die Demo durch Polizeigewalt und einschüchterung eskalierte und somit die Stimmung kippte. Die Tagesschau schreibt im nächsten Satz: "Einsatzkräfte setzten zwischenzeitlich Wasserwerfer und Tränengas ein. Einige Vermummte warfen Rauchbomben, stellten Mülltonnen auf Straßen und steckten ein Auto in Brand. Sieben Personen wurden im Kontext der Zusammenstöße festgenommen" [9]. Anstatt sich auf den Inhalt der Demonstration zu konzentreiren wird die gesamte Beschreibung der Demonstration auf einzelne Eskalationen reduziert; von dem freidlichen Teil der Demo und von den Forderungen ist keine Rede [9]. Im nächsten Abschnitt spricht die Tagesschau davon, dass die Aktivist:innen "[...] in Gewahrsam genommen" wurden [9]. Hierbei werden die Fakten der illegalen Razzia auf das Boot ignoriert. Der Fakt, dass der Überfall auf die Flottila nach internationalem Recht illegal war, in internationalen Gewessern stattfand und Thunberg nach Außsagen der schwedischen Regierung, die eng mit Thunberg in Kontakt steht, von der IDF zusammen mit den anderen Aktivist:innen mishandelt wurden wird ignoriert und auf den Euühemismus "in Gewahrsam genommen" reduziert [9]. Die Tagesschau fährt fort, indem sie das Motiv der Flottila aus scheinhaften Neutralität heraus in Frage stellt. Die Tagesschau schreibt, dass Israel Thunberg angeboten hat, die Hilfsgüter auf der Flottila über die palästinensischen Küstengebiete selber zu überstellen [9]. Dieses Angebot hat Thunberg offensichtlich abgelehnt, da die Hilfslieferungen niemals ankommen würden, wenn nicht einmal die Hilfslieferungen der UN nach Gaza durchkommen [CN]. Die Tagesschau verkennt diese Begründung. Stattdessen schreibt die Tagesschau: "Die Aktivisten lehnten das mit der Begründung ab, Israels Blockade des Gazastreifens sei völkerrechtswidrig" [9]. Hier wird wieder die Faktenlage anhand von fehlleitenden, scheinbar neutralen Formulierungen verdreht, um die pro-Israel Position zu schützen und die pro-palästinensische Position in Verdacht zu stellen. Die Blockade Israel's ist nämlich nicht nur nach Thunberg's Meinung Völkerrechtswidrig, sondern die Blockade ist faktisch völkerrechtswidrig. Die israelische Blockade des Gazastreifens wird von der UN und dem IKRK als völkerrechtswidrige kollektive Bestrafung der Zivilbevölkerung eingestuft, die gegen das humanitäre Völkerrecht, insbesondere die Vierte Genfer Konvention, verstößt [10, 11]. Die Illegalität der Blockade ist garnicht aus irgendeiner sinnvollen Perspektive in Frage zu stellen. Durch die bewusste Formulierung, die Blockade "sei" Völkerrechtswidrig, anstatt "ist" Völkerrechtswidrig wird der Anschein erweckt, als wäre es nur die persönliche Meinung der Aktivist:innen, dass die Blockade Völkerrechtswidrig ist. Bereits die Idee eines Friedensabkommens zwischen Israel und der Hamas ist schwer vorbelastet. Das letzte Friedensabkommen, dass die USA zusammen mit der Hamas beinahe fertiggestellt und zusammen mit Israel unterschrieben hätte, wurde wehrend die Verhandlungen im Verhandlungsbüro liefen von Israel in ein zwanghaftes Ende bombardiert. Diese Friedensverhandlungen, die einen Tag vor der Hamas Zustimmung war, fand nichtmal in Gaza statt, sondern in Doxha, Qatar. Israel hat also Raketen von Tel Aviv über Jordanien, Saudi Arabien und den arabischen Golf mitten in die Stadt Doha geschickt, und damit die aktuellsten Friedensverträge gewaltsam beendet. Eine großartige Voraussetzung für einen neuen Versuch. Noch besser: Israel hat nicht einmal getroffen. Die Hamas Köpfe, die gerade über Frieden mit Israel gesprochen haben, haben überlebt, aber dafür sind etliche Zivilisten sind an der Attacke gestorben [12, 13]. Der Doha Angriff symbolisiert eine Rücksichtslosigkeit Israels gegenüber der westlichen Diplomatieversuchen. Damit das Friedensabkommen vom 10. Oktober 2025 langfristig funktionieren kann muss Israel aber dazu in der Lage sein, westliche Diplomatie einzuhalten. Professor für internationales Recht und Mitglied der 'United Nations special rapporteur' Richard Falk schreibt: "Israel’s brazen September 8 missile strike on Doha in targeting senior Hamas negotiators has sent reactions all throughout the region, threatening to disrupt US brokered ceasefire talks" [13]. Der internationale Gegenwind gegen das israelische Manöver stark [14]. Die Begründung von dem Knesset (von Netanyahu ausgetragen, aber wahrscheinlich durch eine Knesset-Entscheidung verwirklicht worden) ist, dass der Angriff 'in response to [...]', das heißt: ein Racheangriff, für den Hamas Mord an sechs Menschen in Jerusalem am Montag (08.09.2025) [14]. Angeblich ist dieser israelische Angriff durch die Abwehr gegen die Hisbollah zu rechtfertigen. Nur hat die Hisbollah nicht Israel angegriffen. Israel hat einfach ohne Provokation den Libanon angegriffen [17, 18]. Das sagt sogar DER SPIEGEL [18]. Noch spannender wird die Sinnlosigkeit der militärischen Gewalt, wenn wir betrachten, dass der Angriff nicht nur ohne jegliches sinnvolles Motiv stattgefunden hat und dadurch grundlos den Konflikt zwischen Libanon und Israel eskalieren wird, sondern auch keinerlei Zweck erfüllt hat. Israel hat nämlich nicht eine Hisbollah-Zentrale angegriffen oder wenigstens gezielt auf bestimmte Terroristen geschossen, sondern Israel hat den Ort, den Israel zersprengt hat, irgendeinen Laden für Automaschinerie [17]. Das israelische Militär hat also direkt nach dem Waffenstillstandsabkommen (das sich zwar nicht auf Libanon bezieht, aber trotzdem diplomatisch nicht schön aussieht) irgendeinen Mechanikerladen in Libanon angegriffen und dabei zufällige Mechaniker:innen verletzt [17, 18]. DER SPIEGEL spricht von „ein[em] Syrer sowie sechs Libanesen“ [17]. Ein Hisbollah-Kontext wird nicht erwähnt, vermutlich weil es keinen gibt [18]. Der Ort des Einschlags wird von DEM SPIEGEL als „Die Angriffe zerstörten unter anderem auf einem Platz abgestellte Schwerfahrzeuge und beschädigten ein vorbeifahrendes Fahrzeug“ beschrieben [18]. Israel begründet die Attacke so: „Die israelische Armee erklärte hingegen, sie habe ein Lager angegriffen, in dem Maschinen zur Wiederherstellung von Infrastruktur für die Hisbollah gelagert worden seien.“ [18] (Zitiert aus DER SPIEGEL). Schauen wir uns diese Begründung genauer an: Israel vermutet also, dass die Hisbollah plant, Israel anzugreifen. Das müssen sie aus einem rein moralischen Selbstverteidigungsmotiv unterbinden. Also finden Sie raus, wo die Hisbollah ihre Waffen baut. Irgendwie kommt das israelische Militär darauf, dass in genau diesem Keller irgendwo im Libanon ein solches Waffenlager sein soll. Jetzt stellen sich folgende Fragen: Woher weiß das israelische Militär, dass genau da ein Waffenspeicher sein soll? Und: Wenn man weiß, dass es so ein Waffenlager gibt, wie kann man es am besten ausschalten? Zur ersten Frage: Das israelische Militär kann entweder durch jeden Keller in ganz Libanon durchgeguckt haben und diesen einen Keller gefunden haben oder sie haben irgendeine Fährte. Ich halte es für unwahrscheinlich, dass das israelische Militär jeden Keller in ganz Libanon alle paar Tage durchschaut. Also werden sie irgendeinen Hinweis gehabt haben, der vertrauenswürdig genug war, um das Leben von unschuldigen Libanesen und einen Teil der libanesischen Infrastruktur sowie eine mögliche Eskalation des Konfliktes in Kauf zu nehmen, um dieses Waffenlager zu zerstören. Wenn das israelische Militär so eine Fährte hat, warum veröffentlichen sie diese nicht? Man würde denken, es wäre deutlich einfacher, auf Israels Seite zu stehen, wenn sie tatsächlich die Beweise, die sie haben müssten, um so einen Angriff durchzuführen, veröffentlichen oder diese Beweise zumindest an Vertrauenskörper geben, die der Öffentlichkeit bestätigen, dass der Beweis seriös ist. Dass das israelische Militär solch einen Beweis nicht veröffentlicht oder an Drittparteien weitergibt, lässt vermuten, dass sie gar keinen Beweis haben. Es wäre spannend, wenn ein:e Journalist: in zu den Ruinen des Ladens im Libanon geht und mal schaut, ob in dem besagten Keller, der ja jetzt durch den Bombeneinschlag freigelegt ist, tatsächlich Waffen drinliegen. Noch besser: Das israelische Militär könnte einen Fotografen in den Libanon schicken, der selber offizielle Beweise sammelt, jetzt, wo der Ort offenliegt. All das ist nicht passiert. Vielleicht weil der israelische Geheimdienst dort keine Waffen finden würde. Es ist nicht so, als wäre die Suche schwierig. Die Waffen sind ja laut dem israelischen Militär im Keller versteckt. Ich weiß nicht, ob diejenigen, die über diesen Angriff berichten, so weit denken, aber eine Rakete, die in ein Gebäude einschlägt, erreicht den Keller nicht. Deshalb verschanzen sich Menschen bei Bombeneinschlägen im Keller, weil der Keller bei Bombeneinschlägen unversehrt bleibt. Also selbst wenn es einen Waffenkeller gab: Die Rakete hätte ihn nicht einmal erreicht, was die gesamte Aktion noch sinnloser macht. Es gibt also, nehme ich anhand der mangelnden Beweisveröffentlichung Israels an, keinen Grund, diesen Ort anzugreifen, und zusätzlich ist die Methode in beiden Szenarien nicht zielführend, sondern sogar extrem kontraproduktiv aus strategischer und moralischer Sicht. Das eine Szenario ist, dass dort nichts ist, was Israel aus strategischer Sicht schaden würde und aus moralischer Sicht verwerflich ist, und das andere Szenario, nämlich dass es ein Waffenlager gibt, macht den Angriff in Form einer Militäraktion ebenfalls sinnlos. Denken wir einmal darüber nach, was die sinnvollste Handlung wäre, wenn man seriöse Beweise für ein Waffenlager hat. Sinnvoll wäre es, die diplomatisch involvierten Drittparteien (der Westen, die arabische Welt) miteinzubeziehen. D. h., die Beweise darzulegen und somit die internationale Unterstützung zu bekommen. Dann könnte man Einsatzteams (entweder eine israelische Einsatzgruppe, die international bei der Untersuchung geschützt wird, oder eine amerikanische Truppe) zu dem bestätigten Waffenlager schicken und der Hisbollah die Waffen wegnehmen. Eine Pazifizierung wäre also möglich. Diese wird aber abgelehnt. Stattdessen wird eine militaristische Herangehensweise bevorzugt, die unschuldiges Sterben ohne Ende und Gewalt ad infinitum ohne eine Konfliktlösung beinhaltet. Der erste Waffenstillstand wurde bereits im August als Vorschlag bekannt gegeben. Seit spätestens dem 19.08.2025 hat sich die Hamas, nach dem Handelsblatt, offen für einen Waffenstillstand gezeigt [23]. In den letzen zwei Tagen hat die IDF mehr als 100 Palästinenser getötet [19]. Die USA, der größter Unterstützer Israel's und das einzige relevante Land in der Welt dass vor der UNO gegen eine Zwei-Staaten Lösung gestimmt hat und somit die diplomatischen Fortschritte im Nahen Osten seit Jahrzehnten blockiert, ist keineswegs ein neutraler Akteur. Trotzdem rief Trump am Sontag (05.10.2025) zu einem sofortigen Stopp der Bombardierungen in Gaza auf [20]. Die israelische Armee hat den Aufruf von Trump tatsächlich wahrgenommen, da der israelische Sprecher S. Badrosian schon am selben Tag von einer Reduzierung der Bombardierungen sprach [20]. Die Erschießung der palästinensischen Bevölkerung wurde trotzdem nicht gestoppt. Nach der Associated Press sind am selben Tag an dem die Reduzierung der militärischen Gewalt von Israel ausgesprochen wurde sind min. Zwölf Menschen in Gaza ermordet/totgeschlagen worden [20]. Min. acht der ermordeten Menschen in Gaza wurden über 'strikes' [20], also militärische Gewalt anhand von Lufttechnik im Gegensatz zu Gewalt von Bodentruppen. Genau dass was Israel als erste Basis für einen Friedensvertrag unterlassen sollte. Der erste Aufruf von Trump die Bombardierungen zu unterbrechen war bereits am Freitag [19]. Der Freitag (03.10.2025) ist diplomatisch wichtig, da an diesem Datum die Hamas den Vorschlag von den USA und Israel eines Waffenstillstands geantwortet hat. D. h. während die Hamas über das Angebot eines Waffenstillstands nachdachte sind Palästinenser von israelischen Bodentruppen erschossen worden und mindestens acht Menschen durch Luftwaffen getötet worden [20]. Einer der Verletzen war der international eingereiste Doktor Abed El Hameed Qaradaya, der am Donnerstag (02.10.2025), also bereits nach dem Vorschlag eines Waffenstillstands, verwundet wurde [20]. Der Kollege von Abed El Hameed Qaradaya, Abed El Hameed, ist am selben Tag von der IDF getötet worden [22]. Abed El Hameed Qaradaya, der 18 Jahre lang der leitende Artzt der MSF Physiotherapie Department in Gaza war, ist einige Tage später an seinen Wunden gestorben [22]. Schauen wir uns die Situation in Gaza noch genauer an, spezifisch an genau den Tagen an dem die Waffenstillstandsvorschläge durchkamen. ZNetwork schreibt: "On Saturday, Trump said that he appreciated that “Israel has temporarily stopped the bombing,’ but on the same day, the IDF killed at least 70 Palestinians in Gaza according to medical sources speaking to Al Jazeera" [19]. Gaza's Gesundheitsamt, dass nach Angaben der UN und anderer international anerkannter Institutionen genau mit diesen Zahlen ist, hat innerhalb von zwei Tagen nach dem Ausruf von Trump den Tod von min. 129 Palästinensern gezählt [19]. Verwundet wurden etwa 153 Palästinenser und getötet etwa 63 am 06. Oktober, ein Tag nach Trumps Aufruf zum Stopp der Bombardierungen am 05. Oktober [19]. In dem Waffenstillstandsabkommen steht drin, dass die Hamas sich auf eine 60-Tage lange Waffenruhe einigen soll und die israelischen Geiseln freilassen soll. Im Gegenzug bekommen sie die palästinensischen Geiseln zurück. Bevor Netanyahu über den Friedensplan von Trump informiert wurde, sprach er vor der UN General Assembly. Nach East Post sagte er: "The prime minister vowed to continue bombing Gaza. He vowed to adhere to no peaceful solution but the extermination of Palestinians, whom he labelled as Hamas" [26]. Nach dem Friedensplan von Trump muss Gaza eine "a deradicalised terror-free zone that does not pose a threat" sein [26]. Die israelischen Gewaltausschreitungen die lange vor der Wahl der Hamas 2006 in Gaza stattfanden, sowie die Gewaltausschreitungen Israel's im Gazastreifen vor dem 07. Oktober (Operation Desert Storm, Operation Cast Lead, Operation protective Edge) werden nicht erwähnt. Das Handelsblatt hat hier eine klare politische Haltung, die sie hinter scheinhafter Neutralität verstecken möchte. Der Artikel des Handelsblatt [23] beginnt mit der Einstufung der Hamas als 'radikalislamisch' [23]. Wörter wie 'terroristisch' oder einfach nur 'Hamas' hätte aus einer Informationsperspektive gereicht. Die Einstufung als 'radikalislamisch' stellt die Thematik so auf, dass Israel in die moralische Verhandlungsrolle bewegt wird. Israel wird in dem Artikel mit keinen Adjektiven betitelt [23]. Ebenso wird weder Netanyahu, noch die IDF mit irgendeinem Adjektiv oder faktischer Bezeichnung wie 'verfolgt von dem Internationalen Gerichtshof' oder 'Unter Genozidvorwurf' beschrieben. Somit soll bereits vor der Faktenbetrachtung eine bestimmte Seite bescheint werden. Das die Hamas der Feind ist und ihre Handlungen nicht zu rechtfertigen sind ist allen klar, aber es ist nicht so als würde Israel nicht auch in der Kritik stehen. Die "Held/Opfer gegen Bösewicht" Aufmachung wird trotzdem beibehalten, obwohl sie nicht so eindeutig ist. Spannend ist auch, dass die Hamas nicht als 'terroristisch' beschrieben wird, was richtig wäre, sondern als 'radikalislamisch'. Man sollte hier beachten, dass die Hamas nicht als 'islamistisch' oder 'dschihadistisch' beschrieben wird, sondern als 'islamisch'. Es wird also nicht die gewaltverherrlichende, fundamentalistische und terroristische Ideologie des 'Islamismus' oder des 'Dschihadismus' kritisiert, sondern die Religion des Islam, die mit Terrorismus nichts zutun hat. 'Radikalislamisch' würde eigentlich einfach nur 'orthodox islamisch' heißen. Hiermit wird impliziert, dass orthodoxer Islam mit terroristischem Dschihadismus gleichzusetzen ist. Das nicht jede:r Muslim:in ein:e Terrorist:in ist muss man der Antideutschen Redaktion vielleicht nochmal erklären, aber für geistig normale Menschen sollte das klar sein. Weiter schreibt das Handelsblatt von 'Geiseln' wenn es um Hamas-Geiseln geht, und um 'Gefangene' wenn es um Israel's Geiseln geht [23]. Die Geiseln der Hamas wurden auf furchtbare art während des Massakers am 07. Oktober zufällig aus der unschuldigen israelischen Bevölkerung entführt und werden seitdem als Druckmittel gegen Israel verwendet. Ein Bilderbuchbeispiel von nicht Terrorismus ohne Rechtfertigung oder Moral. Die palästinensischen Geiseln als 'Gefangene' zu bezeichnen ist schlicht nicht richtig. Die palästinensischen Geiseln werden in unmenschlichen Verhältnissen gehalten [24]. Diese Geiseln sind politische Gefangene, keine Straftäter:innen [24]. Sie sind gefangen auf Basis von politischen Motiven, nicht auf Grund von rechtlichen [24]. Zum Stand von April sind es 10.000 Palästinensische Gefangene, die wegen ihrem Aufstand gegen die israelische Besatzung inhaftiert wurden [24]. Von diesen 10.000 palästinensischen Gefangenen, die Teil der aktuellen Verhandlungen sind, sind 3,498 ohne Anzeige und ohne Gerichtsverfahren inhaftiert und 400 sind Kinder [24]. Nach Al Jazeera: "Israel is the only country in the world that tries children in military courts, often denying them their basic rights. According to Defense for Children Palestine, about 500 to 700 Palestinian children are detained and prosecuted in the Israeli military court system each year – some as young as 12" [24]. Zum Teil werden die palästinensischen Gefangenen auf Basis von vagen Vermutungen inhaftiert. So schreibt Al Jazeera: "In July 2020, the Israeli army stormed Birzeit University in the occupied West Bank and arrested Nada* while she was attending a cultural event. She was accused of plotting “acts of terrorism” against Israeli forces and sentenced to 20 months in prison. But Nada says she neither committed a crime nor engaged in acts of ‘‘resistance” that would provoke her arrest" [25]. Die BBC schreibt in "Trump's 20-point Gaza peace plan in full" [27], dass der Friedensplan ein "major step towards a permanent end to two years of war" sein soll [27]. Noch bevor wir überhaupt den Friedensplan inhaltlich analysieren ist bereits die historische Einordnung, die die BBC gibt falsch. Nach der BBC ist der Krieg in Gaza erst zwei Jahre alt [27]. Damit ist gemeint, dass der Krieg am 07. Oktober angefangen hat. Das ist nicht nur falsch, es ist eine antihistorische und bewusste Lüge. Das routinemäßige Bombardieren des Gaza-Streifens, sowie das tägliche einsetzen von israelischen Bodentruppen im palästinensischen Zivilgebiet ist Jahrzehnte älter als 2023. Die ersten modernen militärischen Attacken der israelischen Armee gab es bereits direkt nach der Wahl der Hamas 2006. Die israelische Besatzung des palästinensischen Gebietes (inklusive des Gaza-Streifens), welche durch politische Gewalt durchgesetzt wurde, gibt es bereits seit der Nakbar und dem sog. 'Palästinenserkrieg' (1947-1949). Der gewaltvolle Konflikt zwischen Zionisten und Arabern geht bis zur ersten 'Alija' zurück. Also angefangen 1881. Die Pazifierung der Hamas würde hoffentlich nicht nur der palästinensischen und israelischen Bevölkerung, sondern dem gesamten Nahen Osten, gut tun. Die einzige Gefahr die in der Pazifierung der Hamas liegt ist, dass Israel freien Weg bekommen würde, Palästina vollständig zu übernehmen und den Staat Palästina zur Geschichte zu machen. Das würde nicht zu einem Apartheidstaat führen, sondern zu einer One-State-Solution. Also etwa das selbe was mit den Ureinwohner:innen von den USA passiert ist. Die israelische Regierung hat am 21. Januar mehere Häuser in Shuqba zerstört [28, 29]. Das Dorf liegt in der nähe von Ramallah. Am 22 Januar hat das sog. 'Sicherheitsministerium' unter Ben-Gvir in 18 neuen Westbank Gebieten, illegal annektiert von der israelischen Regierung, eine Waffenlizens an die israelischen Siedler:innen vergeben [30]. Somit erweitert die israelische Regierung ihre militaristische Strategie. Jetzt können nicht nur das israelische Exekutariat für die Gewaltherrschaft über die Palästinenser sorgen, sondern auch die israelische Zivilbevölkerung. Das wird durch die Propagandamaschine der israelischen Regierung erreicht. Dadurch das die israelische Regierung nicht nur die materiellen Bedingungen für Gewalt kontrolliert, sondern durch den israelischen Medienapparat auch die öffentliche Meinung beherrscht werden kann, kann die israelische Regierung ihre Strategie von einem Exekutariat in der Westbank auf eine militate israeliche Zivilbevölkerung ausweiten. Das erweitert die überweltigende Kontrolle der israelischen Regierung noch weiter. Seit dem 07. Oktober benutzt Israel die Yellow-Line Strategie. Im Januar 2026 greift die israelische Regierung wieder darauf zurück [31, 32].
+<p>
+    _________    
+</p>
+
+
+Jetzt zu dem Aktuellem: Das Washington Institute for Near East Policy schreibt als Überschrift:
+"Hamas Accepts the Gaza Roadmap: Political Breakthrough, Implementation Uncertainty" [34].
+Die Aussage Political Breakthrough ist natürlich gelogen. Das sagt man jedesmal, wenn die Hamas von dem Vertragfeindlichen Israel endlich so stark in die Knie gezwungen wurde, dass sie endlich ihre ungeliche Position im Verhandeln annehmen nur um dann schon ein Tag danach vertragsbrechend von Israel abgezogen zu werden. Es gab bereits unendlich viele Verhandlungen und Verträge zwischen Israel und Palästina bzw. Nach 2007 mit der Hamas. Viele waren ungelich ausgelegt, viele wurden wiederwillig akzeptiert, viele wurden bei falschen Entscheidungen der Palästinenser von USA und Israel gewaltsam bestraft und viele Akzeptierungen der Verträge wurden unmittelbar danach von Israel geborchen. Waffenstillstandsabkommen, Camp-David Accords usw. Wir sehen also, dass der Zyklus wie immer weiter geht. Es passiert genau das selbe, was schon vor 50 Jahren passiert ist. Ungleiche Verhandlung die sowieso gebrochen werden. Wer wirklich denkt, dass in Verträgen die von dem Anwalt Israels (die USA) in die Wege geleitet werden tatsächlich den Israelis UND den Palästinensern helfen werden halluziniert. Vielmehr muss man dazu garnicht sagen. Die Verträge sind mehr oder weniger nur eine Ablenkung von dem eigentlich Wichtigen. Damit ist nicht gemeint, dass es einen Meisterplan vom israelischen Hinterzimmer gibt, dass diese Verträge bewusst zur Ablenkung konstruiert, sondern das diese Verträge als Nebenwirkung nunmal ablenkend sind.
+
+<p>
+(6)
+Saudi-Arabien, Türkei und Pakistan schließen Verteidigungspakt
+</p>
+"Vor dem Hintergrund des Nahost-Kriegs haben sich die Türkei, Pakistan und Saudi-Arabien auf ein Verteidigungsabkommen geeinigt. Jeder Angriff auf eines der Länder gelte nun als Angriff auf alle drei Bündnispartner" [1].
+So neu ist das alles garnicht. Saudi-Arabien und Pakistan haben schon seit 20253 ein Verteidigungsabkommen [2]. Die Gründe bestanden also schon vorher und jetzt kommt nurnoch die Türkei dazu [3]. Diese 2025er Gründe waren auch ersteinmal nicht überraschend. Man wollte halt abschrecken. Saudi-Arabien freut sich, da Pakistan eine starke, intakte Armee hat und atomar bewaffnet ist. Pakistan erhält einen strategisch super wichtigen Partner, da Saudi-Arabien wirtschaftlich starke Reichweite hat und Pakistan seit jahrzehnten unterstützt. Es geht also Hand in Hand. Warum ist jetzt also die Türkei auch dabei? Die Türkei ist in der NATO, also komplett abgesichert. Die Antwort ist: die Türkei will mehr Einfluss im Nahen Osten, Ankara will nicht nur westlich abgesichert sein und Ankara will die Rüstungsindustrie ausbauen. Es liegt also im nationalen Interesse aller drei Staaten diesen Pakt abzuschließen. Entscheidend kann man hier aber nicht drüber diskutieren.
+
+<p>
+(7)
+Sudan
+</p>
+Die UNO sagt, "Sudan verliert eine weitere Generation zum Krieg" [1].
+"More than 1,000 days of war in Sudan have left millions of children out of school, displaced or exposed to grave violations, the UN Deputy Secretary-General said on Friday, calling for renewed action to end the conflict" [1].
+Das sind die Folgen des Konfliktes. Der Konflikt besteht darin, dass zwei Militäre angeben, das offizielle sudanische Militär zu sein. Einerseits gibt Abdel Fattah al-Burhan an mit der SAF die legitime Exekutive zu sein. Dagegen sagt Mohammed Hamdan Daglo (Hemedti) von der RSF, dass er die Herrschaft haben sollte. Aus diesem Konflikt zwischen den Milizen sind bereits Massaker entstanden wie z. B. das Al-Fashir Massaker. Das ist die erste Approximation des Konfliktes. Diese Woche ist einiges dazu gekommen. Einerseits sind die Angriffe auf Darfur gestiegen. Darfur ist einer der schlimmsten Regionen im Sudan. Es gibt dort die meisten Terrorakte und Todesfälle. Am zweiten August sind 35 Menschen dort getötet worden. Die RSF beschuldigt sich gegenseitg dafür verantwortlich zu sein. Zu den Neuigkeiten gehört auch der Einsatz von Drohnen. Die Drohnenangriffe die jetzt in Anzahl steigen sind wieder vorallem in Darfur zu finden, aber auch in der Region Kordofan. Was weiterhin wichtig bleibt ist der Kampf um die Stadt El Obeid. Tschad und Äthiopien werden außerdem weiter in den Konflikt hineingezogen. Was jetzt aktuell wirklich beängstigend ist ist das Problem, dass eine gesamte Generation im Sudan bedroht ist. Die Sudanesen haben als ganze Bevölkerung Probleme durch den Krieg [2]. Hierzu ein Artikel von Aljazeera:
+"War in Sudan has left over 8 million children out of school, and nearly three-quarters of schools have been affected, according to the UN" [2].
+Das es furchtbar Probleme gab, wussten wir schon, aber dieses Ausmaß ist modern (seit 2026). Vorgetragen wurde diese Nachicht von Amina Mohammed bei der UN Security Council.
+<p>
+(8)
+Südsudan
+</p>
+Südsudan wurde 2011 unabhängig von Sudan und führt seit 2013 einen eigenen Bürgerkrieg [1]. 2013 brach dann eine Konflikt zwischen dem Präsidenten Salva Kiir und dem Viezepräsidenten Riek Machar aus. Dann haben die beiden aber ein Friedensabkommen geschlossen und wieder eine Regierung gebildet [2]. Die UNO schreibt
+"Just two years later, on 15 December 2013, violence broke out in the capital Juba and quickly spread to other parts of the country, resulting in a nationwide political and security crisis. There were widespread human rights consequences, with thousands of people killed during the hostilities, especially in areas of greatest military confrontation. The parties to the conflict were deemed responsible for ethnically targeted attacks on civilians and a failure to comply with international human rights and humanitarian law" [2].
+Wir haben also ein Bild von dem Chaos. Jetzt zu dieser Woche: Die Wahlen im Dezember geraten weiter unter druck, die Regierung hält trotzdem an den	 Wahlen fest, die Sicherheitslage ist immernoch unsicher aber die humanitäre Lage wird schlechter und der Goldschmuggel bleibt gleich. Eine wichtige Sache ist außerhalb von Südsudan passiert. Die Gerichte der USA haben die Bedingungen für den Temporary protected Status für südsudanesische Staatsangehörige freigemacht [3]. Im Dezember soll jetzt in Südsudan gewählt werden. Es wird der Präsident, das Parlament und anderes Gewählt. Diese Wahlen sind besonders, weil sie durch Verschiebungen Jahre zu spät kamen. Mit den Wahlen gibt es aber vier Probleme: (1) Die Friedensvereinbarung ist noch nicht vollständig umgesetzt, (2) es gibt immernoch bewaffnete Gewalt, (3) es gibt noch keine endgültige Verfassung, (4) die Opposition ist gespalten. Die Regierung sagt, sie hat die Friedensvereinbarungen nur spärlich umgesetzt, aber es reicht trotzdem aus für Neuwahlen. In einigen Teilen des Landes kämpfen immernoch bewaffnete Kräfte gegen die die Exekutive der Regierung. Die Verfassung sollte eigentlich für die Wahl fertig sein, ist sie aber nicht. Was ist diese Friedensvereinbarung? Damit ist die Revitalized Agreement on the Resolution of the Conflict in South Sudan gemeint. Da ging es darum: Wir beenden den Bürgerkrieg, teilen die politische Macht vorübergehend und bauen danach einen funktionierenden Staat auf, der Wahlen abhalten kann. Das hat aber nicht funktioniert und daher stammen die Probleme.
+
+
+<p>
+Innenpolitik
+</p>
+<p>
+(1)
+DER SPIEGEL - »Es ist der Moment, in dem der Kapitalismus und die Menschheit sich voneinander trennen«
+</p>
+In dem Artikel von DER SPIEGEL wird zuerst der israelische Historiker Yuval Noah Harari zitiert, der in dem Artikel auch Interviewgast ist. Ihn als meinungswichtige Person darzustellen ist eine schlechte Wahl, da er in der wissenschaftlichen und historischen Gemeinde richtigerweise gesehen wird als Person die komplexe Geschichte extrem stark vereinfacht, spekulative Thesen als Fakten präsentiert und vorallem: Harari ist Synthesizer und kein Spezialist. Kein guter Startpunkt. Zuerst wird gefragt:
+"Herr Harari, Sie warnen seit Jahren vor den Gefahren künstlicher Intelligenz. Ist die KI-Revolution mit der industriellen Revolution vergleichbar" [1]?
+Was hat Harari also gesagt zu dem Thema? In einem anderen Artikel [2] schreiben die Autoren: "Historiker Yuval Noah Harari plädiert für eine Verlangsamung des KI-Wettrüstens. Der Grund dafür: Mit dem Beherrschen von Sprache habe Künstliche Intelligenz das „Betriebssystem der menschlichen Zivilisation gehackt“. Wie soll man sich diese Verlangsamung vorstellen? Die weiterentwicklung der Produktivkräfte wird immer weiter gehen. Das ist der normale Kapitalkreislauf. Gehen wir mal davon aus, China würde damit aufhören, den KI-Markt zu bedienen. Wie würde China wettbewerbsfähig bleiben, wenn sie die Marktführer sind? Meinetwegen kann sich Harari das wünschen, aber interessieren tut es kein Unternehmen. Die etlichen KI-Weißheiten sind also für manche schön zu lesen, sind aber nicht wirklich sinnvoll, da sich eh nichts ändern wird. Wie will man KI-Unternehmen davon überzeugen, keine Produkte mehr zu entwickeln/verkaufen? Was antwortet Harari?
+"Die industrielle Revolution war fundamental anders als das, was jetzt passiert: Diesmal erschaffen wir Akteure, nicht Werkzeuge. Früher haben wir Züge gebaut, Dampfer, Generatoren. Aber Menschen haben entschieden, wofür sie eingesetzt werden. Man kann ein Messer benutzen, um Salat zu schneiden oder um jemanden zu ermorden. Das Messer sagt einem nicht, was man tun soll. Auch eine Atomwaffe tut das nicht. Die künstliche Intelligenz aber macht das" [1].
+Akteur und Werkzeug ist hier keine Formulierung die Ich verwenden würde. Der entscheidende Unterschied zur industriellen Revolution liegt daher weniger darin, dass Maschinen jetzt „Akteure“ werden. Auch die Maschinen der industriellen Revolution haben menschliche Tätigkeiten ersetzt, Arbeitsabläufe vorgeschrieben und die Organisation der Arbeit verändert. Die Fabrikmaschine war keineswegs einfach ein neutrales Werkzeug: Sie wurde unter kapitalistischen Eigentumsverhältnissen eingesetzt, um Arbeitskraft zu disziplinieren und Mehrwert zu produzieren. Bei KI wird dieser Prozess allerdings qualitativ weitergetrieben. Eine Maschine ersetzt nicht mehr nur körperliche Handgriffe, sondern kann Teile von geistiger Arbeit, Planung, Bewertung und Entscheidung übernehmen. Dadurch kann sich die Macht über Arbeitsprozesse noch stärker von den unmittelbar Arbeitenden auf diejenigen konzentrieren, die die KI-Systeme, Daten, Rechenzentren und Unternehmen besitzen. Die entscheidende Frage wäre deshalb nicht: „Was will die KI?“ Sondern: Wer bestimmt, was die KI tun soll, nach welchen Kriterien sie entscheidet und wem die daraus entstehende Produktivität zugutekommt? Wenn eine KI beispielsweise Bewerber auswählt, ist es nicht primär die „Autonomie“ der KI, die politisch interessant ist. Interessant ist, dass ein Unternehmen eine Entscheidung, die früher von einem Menschen getroffen wurde, in ein algorithmisches System verlagert. Die gesellschaftliche Macht verschwindet dadurch nicht – sie kann lediglich unsichtbarer und schwerer anfechtbar werden. Hier ein Widerspruch: KI könnte die notwendige Arbeitszeit massiv reduzieren und damit potentiell mehr Freiheit schaffen. Unter kapitalistischen Eigentumsverhältnissen kann dieselbe Produktivitätssteigerung aber auch Entlassungen, Arbeitsverdichtung, Überwachung und eine stärkere Konzentration von Reichtum bedeuten. Das Problem ist also nicht, dass KI zum „Akteur“ wird. Das Problem ist, dass ein immer mächtigeres Produktionsmittel in den Händen einer Gesellschaft bleibt, in der die Produktionsmittel privat kontrolliert werden. Wie auch immer. DER SPIEGEL fragt jetzt
+"KI wird möglicherweise Millionen Jobs vernichten und einen Großteil menschlicher Arbeit überflüssig machen. Kann der Kapitalismus unter solchen Bedingungen überleben" [1]?
+DER SPIEGEL stellt hier sogar mal Systemkritische Fragen. Die Wiedersprüche des kapitalistischen Systems werden sich weiter verschärfen. Aber das war ja eh klar. Unternehmen führen Automatisierung nicht in erster Linie ein, um den Menschen mehr Freizeit zu ermöglichen, sondern um Produktionskosten zu senken, die Produktivität zu steigern und im Konkurrenzkampf höhere Profite zu erzielen. Die Arbeit wird immer produktiver, aber wir müssen nicht weniger arbeiten. Ein Unternehmer kann durch eine Maschine beispielsweise 100 Arbeiter ersetzen und dadurch Lohnkosten sparen. Wenn die Maschine billiger ist als die Arbeitskraft, lohnt sich die Investition. Automatisierung ist deshalb ein wichtiges Mittel, um die Produktivität zu steigern und sich gegenüber Konkurrenten durchzusetzen. Nach Marx schafft menschliche Arbeitskraft den neuen Wert, aus dem der Mehrwert und damit der Profit hervorgehen. Maschinen übertragen ihren Wert auf die Produkte, schaffen aber nicht selbstständig neuen Mehrwert. Deshalb kann ein Kapitalist durch Automatisierung zwar einzelne Arbeiter einsparen und seine Kosten senken, aber wenn die gesamte Wirtschaft immer stärker automatisiert wird, wird die Quelle des Mehrwerts relativ zur eingesetzten Maschinerie kleiner. Harari antwortet:
+"Nicht in seiner alten Form. Aber wenn man auf die Theorie zurückgeht, dann heißt es ja nicht, dass man für den Kapitalismus Menschen braucht. Es könnte eine Welt geben, in der KI-Unternehmen enorme Mengen an Kapital ansammeln, das sie dafür verwenden, mehr KI-Akteure zu bauen, welche dann die Galaxie erkunden und sich auf anderen Planeten niederlassen. Alles ohne Menschen. Es ist der Moment, in dem der Kapitalismus und die Menschheit sich voneinander trennen" [1].
+Die Vorstellung, dass der Kapitalismus irgendwann völlig ohne Menschen weiterexistieren kann, setzt voraus, dass Kapitalismus einfach eine bestimmte technische Produktionsweise ist. Das ist er aber nicht. Kapitalismus bezeichnet bestimmte gesellschaftliche Produktionsverhältnisse: Privateigentum an den Produktionsmitteln, Lohnarbeit, Warenproduktion, Konkurrenz und die Akkumulation von Kapital. KI kann diese Prozesse automatisieren, aber sie hebt die gesellschaftlichen Beziehungen, die Kapitalismus ausmachen, nicht automatisch auf. Wenn KI-Unternehmen tatsächlich autonome Maschinen produzieren würden, die selbstständig Rohstoffe abbauen, Fabriken errichten, neue KI-Systeme herstellen und schließlich andere Planeten besiedeln, müsste man trotzdem fragen: Wem gehören diese Maschinen und die von ihnen geschaffenen Produktionsmittel? Wer besitzt die Unternehmen? Wer entscheidet über die Verwendung des erzeugten Reichtums? Wenn eine kleine Klasse von Menschen die Eigentumsrechte an diesen automatisierten Produktionssystemen besitzt, dann wäre das zunächst keine Abschaffung des Kapitalismus, sondern eine extreme Konzentration des Kapitals. Allerdings entsteht an diesem Punkt ein grundlegendes Problem. Kapital ist bei Marx nicht einfach eine Ansammlung von Maschinen oder Geld, sondern ein gesellschaftliches Verhältnis, das sich durch die Produktion und Aneignung von Mehrwert reproduziert. Wenn tatsächlich überhaupt keine menschliche Arbeitskraft mehr notwendig wäre, stellt sich die Frage, woher der Mehrwert kommen soll. Maschinen können Produkte herstellen, aber wenn niemand mehr arbeitet und keine menschlichen Bedürfnisse mehr vorhanden sind, verliert auch die gewöhnliche kapitalistische Logik von Lohnarbeit, Konsum und Profit ihre Grundlage. Man könnte natürlich sagen, dass die KI-Systeme selbst zu einer Art „kapitalistischen Akteuren“ werden. Aber dann müsste man erklären, was Begriffe wie Eigentum, Profit und Kapital noch bedeuten. Eine Maschine kann beispielsweise automatisch Geld auf einem Konto vermehren, aber sie besitzt nicht automatisch Eigentumsrechte im gesellschaftlichen Sinne. Sie kann auch keine Klasse im marxistischen Sinne bilden, solange sie nicht selbst ein gesellschaftliches Rechtsverhältnis verkörpert. Wenn Menschen weiterhin Eigentümer der KI-Systeme sind, bleiben die Menschen die Eigentümerklasse. Wenn die KI-Systeme selbst Eigentümer werden sollen, müsste sich die gesamte rechtliche und gesellschaftliche Struktur des Kapitalismus verändern. Deshalb würde ein Marxist wahrscheinlich widersprechen, wenn man sagt, dass sich „der Kapitalismus und die Menschheit voneinander trennen“. Eher würde man sagen: Wenn die menschliche Arbeit tatsächlich vollständig aus der Produktion verschwinden würde, hätte der Kapitalismus seine historische Grundlage so weit verändert, dass man möglicherweise nicht mehr sinnvoll von Kapitalismus im klassischen Sinne sprechen könnte. Und genau darin liegt aus marxistischer Sicht das eigentlich Interessante. Der Kapitalismus entwickelt die Produktivkräfte ständig weiter, bis seine eigenen gesellschaftlichen Formen ihnen möglicherweise zum Hindernis werden. Eine vollständig automatisierte Produktion wäre daher nicht einfach der Triumph des Kapitalismus. Sie könnte vielmehr eine Situation schaffen, in der die zentrale kapitalistische Frage – wer seine Arbeitskraft verkauft und wer Produktionsmittel besitzt – völlig neu gestellt werden muss. Wenn Maschinen tatsächlich die gesamte materielle Produktion übernehmen könnten, wäre die entscheidende Frage nicht mehr: „Wie schaffen wir genug Arbeitsplätze?“ Sondern: „Warum müssen Menschen überhaupt noch arbeiten, und wem gehört eine vollständig automatisierte Wirtschaft?“ Ein Marxist würde darin wahrscheinlich nicht die Trennung von Kapitalismus und Menschheit sehen, sondern eine mögliche historische Übergangssituation: Die Produktivkräfte könnten eine Gesellschaft ermöglichen, in der die Menschen nicht mehr gezwungen sind, ihre Arbeitskraft zu verkaufen. Ob daraus eine solche Gesellschaft entsteht oder eine extrem konzentrierte Herrschaft über automatisierte Produktionsmittel, wäre letztlich eine politische und Eigentumsfrage.
+
+<p>
+(2)
+DER SPIEGEL – "Der KI-Pitalismus"
+</p>
+DER SPIEGEL schreibt:
+"Künstliche Intelligenz ist dabei, menschliche Arbeit überflüssig zu machen. Die Mittelschicht bangt, die Kapitalbesitzer profitieren, die Unzufriedenheit wächst. Naht das Ende des Kapitalismus, das Karl Marx prophezeit hat" [1]?
+Das sich eine bürgerliche Presse so einen Satz traut ist erstaunlich. Es kann aber daran erklärt werden, dass er keinen wirklichen Inhalt hat. Die These ist so unglaublich philosophisch und ohne wirklichen Gegenstand, dass man sich das schon mal trauen kann als selbstzufriedener Durchschnittsbürger im Spiegelhaus. Obwohl keiner von den den Fernsehfritzen je Marx gelesen hat, kann man das Thema, jetzt wo der Kalte Krieg vorbei ist und man wieder sicher ist kann man den alten Marx wieder einbringen. Schließlich haben auch andere bürgerliche Pressen wie das Handelsblatt bereits positive Artikel über Marx und das Manifest geschrieben. Niemand von ihnen hat es verstanden4, aber immerhin. Eigentlich sagt der Artikel in Gänze: Wenn KI irgendwann den Markt so gut berechnen kann, dass Planung effizienter wird – stirbt dann der Kapitalismus? Aber: Das eigentliche Problem ist nicht, ob man den Markt technisch ersetzen kann. Das Problem ist, wem die Produktionsmittel gehören. Damit wird der gesamte Artikel schon ausgeräumt. Selbst wenn die KI berechnen könnte wie viele Wohnungen benötigt werden, wie viele Lebensmittel produziert werden müssen, wie viel Strom gebraucht wird, welche Transportkapazitäten notwendig sind, welche Arbeitskräfte wo benötigt werden, damit ist noch überhaupt kein Sozialismus erreicht. An Berechnung hat es ja sowieso nie gemangelt. Salvador Allende hat schon 1971 mit Project Cybersyn geschafft. Das man den freien Markt nichts braucht war ja eh schon klar. Es gibt ihn ja schließlich nur weil es im Interesse von ein Paar vollgesaugten Kapitalisten steht in beizubehalten und weil es genug dumme Idioten gibt die auf ihn halluzinierte magische Eigenschafften projezieren. Es gibt nunmal genug pathologische Menschen, die meinen der freie Markt würde sich so toll um sie kümmern. Mehr als sie es eigentlich verdient hätten. KI ändert hier nichts. Die komplette Debatte die DER SPIEGEL hier aufspielen will gibt es eigentlich garnicht. KI, Marx und Kapitalismus sind einfach nur die drei besten Buzzwords für höhere Verkaufzahlen. Hier soll die Debatte dann auch zu Grunde gehen.
+<p>
+(3)
+NDR – Tschentscher kritisiert Steuerpolitik
+</p>
+Peter Tschentscher, der Bürgermeister von Hamburg und zusätzlich ein furchtbarer Mensch, darf sich wieder zu Wort melden und etwas zu der Steuerpolitik sagen. Tschentscher, ein Mensch der den Genozid in Palästina leugnet, die israelische Regierung in ihren Gewaltverbrechen deckt, der palästinensischen Zivilbevölkerung gezielt kolletaral auf den Kopf spuckt und sich ein Scheiß um Opfer von Polizeigewalt kümmert und Menschen die von der hamburger Polizei ins Krankenhaus geprügelt wurden als Schauspieler anstatt als Opfer sieht und somit explizit schwerverletzen Mitbürgern ihren Opferstatus abverlangt nur um seine Polizei zu schützen, will uns jetzt etwas über Wirtschaft erzählen [1]. Eine Person wie Tschentscher ist ja schließlich in der Wirtschaft genau richtig. Da geht es nicht so viel um Empathie gegenüber Schwächeren.
+"Das neoliberal-konservative Motto "man muss nur die Steuern senken, dann geht es wirtschaftlich ab wie Schmidts Katze" sei noch nie aufgegangen, so Tschentscher" [2].
+Da hat der Klassenveräter immerhin noch recht.
+"Tschentscher fordert dagegen eine Digitalsteuer für Tech-Konzerne wie in Frankreich, Österreich und Italien" [2].
+Ja, super. Mehr hat jetzt keiner von dem Reformisten erwartet. Nutzlose Forderungen um die arbeitende Klasse unten zu halten und sie für immer in einer falschen Hoffnung stecken zu lassen. Die Sozialdemokratie, die den "Arbeiterwohlstand" übrigens einfach damit finanziert, dass es für jeden Arbeiter in einem sozialdemokratischen Staat 16 Arbeiter in globalen Süden gibt, die bis auf die Knochen ausgebeutet werden, damit die nationale Arbeiterklasse etwas bessere Bedingungen hat, die sie übrigens jede Sekunde wieder verlieren kann, wenn das Kapital denn will, hat wieder einen Sackgassenvorschlag gebracht. Es ist nichts, wirklich garnichts, neu an diesem Vorschlag und er fällt problemlos hinein in genau das selbe Loch der Nutzlosigkeit der Sozialdemokratie seit dem Wirtschaftswunder.
+
+<p>
+Aktuelle Bücher
+</p>
+<p>
+(1)
+Kohei Saito
+"Degrowth"
+</p>
+Der Autor Kohei Saito hat diese Woche das Buch Am Ende des Fortschritts. Überleben in den Ruinen des Kapitalismus veröffentlicht. Das Buch ist aber nur eine Übersetzung von seinem Buch auf Englisch: Degrowth. Wir werden also über das Buch sprechen.
+
+Introduction
+
+Der Subtitel von der Einleitung ist "Econolgy is the Opiate of the Masses". Das spielt natürlich auf Marx' berühmten Satz "Religion ist das Opium der Massen" an. Scheint mir aber nur als ein rhetorisches Mittel und nicht als konkreten inhaltlichen Bezug. Saito schreibt als erstes: "What kinds of measures are you taking, personally, to prevent global warming? Have you bought a reusable shopping bag to reduce your reliance on disposable plastic ones? Do you carry a thermos so you don’t end up buying drinks in plastic bottles? Did you buy an electric car? Let me make one thing clear from the start: these good deeds are meaningless in the end. They can even cause more harm than good." Das ist komplett richtig. Saito beschreibt hier eine sehr einfache Kritik an Kommunismus bzw. Antikapitalismus als Konsumkritik, Verhaltenskritik, individualistische Problemanalyse etc. und nimmt ganz am Anfang das falsche Bewusstsein weg. Weiter: "What do I mean by that? Simply that thinking such actions are effective countermeasures can prevent us from taking part in the larger actions truly necessary to combat climate change. They function like Catholic indulgences, allowing us to escape the pangs of our conscience about consumerism and look away from the real imminent danger around us, which in turn allows the forces of capital to swaddle our concerns in “environmental impact statements” and tuck them away beneath the form of deception known as greenwashing". Wieder eine genau richtige Analyse der Bedingungen in dem Konsumkritik und individualistischer Aktivismus agiert. "With this in mind, let us turn to SDGs—Sustainable Development Goals—as put forth by the United Nations and promoted by world governments and major industries. Do they have the power to change the overall global environment? The fact is, as you might have guessed by now, they won’t work either. Many governments and major industries have conformed to various aspects of these SDGs already, yet these actions have proven unable to stop climate change. SDGs mainly function as an alibi, most effective at allowing us to avert our eyes from the danger right in front of us." Mit dieser Gegenseite hat Saito auch recht. Er beschreibt einerseits die Lächerlichkeit des individaulsitischen Aktivismus der nicht systemkritisch ist, und andererseits stellt er fest, dass das Kapital nicht aus Bösartigkeit, sondern aus Interessen so handelt wie es handelt. Die erste Seite wird noch besser: "Long ago, Marx characterized religion as “the opiate of the masses” because he saw it as offering temporary relief from the painful reality brought about by capitalism. SDGs are none other than a contemporary version of the same “opiate"". Das ist genau richtig. Hier rundet Saito seine anti-reformistische Position ab und bekämpft damit das bürgerliche, falsche Bewusstsein, wir müssen nur alle zusammenarbeiten und uns mehr in unserem Altag um die Umwelt kümmern und dann ist das Problem gelöst. Weiter erklärt Saito die Entwicklung des Klimawandels und nennt dafür entsprechende Zahlen. Wie schlimm die Umstände werden sobald der Klimawandel in seine wirklich gefährliche Stufe vortschreitet schreibt Saito auch "The ultrarich living in the developed world may be able to maintain their heedlessly luxurious lifestyle even as climate change continues its rapid advance. But most of us ordinary people barely getting by each day will lose our way of life completely and be forced to scramble desperately just to survive. This hard truth should have become obvious to all during the COVID-19 pandemic." Weiter spricht Saito von Strategie: wir sollen nicht denken, andere würden das Problem für uns lösen, sondern wir sollen aktiv werden. Wie das aussieht wird er wohl noch sagen. "To determine which direction is right, we must trace the current climate crisis to its root cause. The root cause is capitalism, and understanding this is key. The enormous increase in carbon dioxide emissions began, after all, with the Industrial Revolution—that is, when capitalism first began to truly operate in the world. It was shortly after this occurred that someone appeared who was able to clearly comprehend and analyze capitalism’s nature. This was, of course, the German thinker Karl Marx." Die genau richtige Basis ist jetzt also gelegt worden. Wir werden jetzt also sehen, wie Saitos grüner Antikapitalismus aussieht.
+
+I
+Climate Change and the Imperial Mode of Living
+
+Am Anfang spricht Saito über den gewinner des Nobelpreis für Ökonomie William Nordhaus. Dieser war einer der Ersten der sich darum gekümmert hat, den Klimawandel in die Ökonomie einzugliedern, so schreibt Saito. Damit gibt es aber ein großes Problem: Das Nordhaus Modell würde am Ende für ein Temperaturanschwung von 38.3 Grad Fahrenheit sorgen, obwohl man eigentlich 35.6 bräuchte, so Saito. Saito schreibt: "This is why it’s so easy to accept Nordhaus-style solutions. They are indisputably effective as strategies for economists to raise their profile among international organizations and so on. But the cost of this prominence is the justification by economists of lackadaisical climate change policies that are little better than doing nothing at all." Saito macht sich hier zurecht Sorgen. Saito sagt, die Klimakriese hat jetzt schon begonnen und wird einen Point of no Return erreichen. Bzgl. der Probleme den der Klimawandel jetzt schon auslöst und die auch nicht mehr gestoppt werden können. 
+<p>
+(2)
+Raju J. Das
+Theories for Radical Change: Key Texts from the Political Economy of Marx and Lenin
+</p>
+<p>
+(3)
+Ernesto Gallo
+The Era of Authoritarian Neoliberalism: The Rise of Technocrats, Nationalists and Autocrats
+</p>
+<p>
+(4)
+Thomas Birkner
+Medialisierung und Mediatisierung
+</p>
+
+<p>
+Quellen
+</p>
+1.1
+[1] https://docs.un.org/en/S/RES/2827(2026).
+1.2
+[1] https://www.handelsblatt.com/politik/international/iran-krieg-us-generalstabschef-caine-sucht-angeblich-ausweg-aus-trumps-iran-krieg/100136895.html.
+[2] https://www.spiegel.de/ausland/iran-krieg-donald-trump-hat-ein-munitionsproblem-a-17de2a6a-5e1b-43c7-941b-dd1704282754.
+[3] https://www.bbc.com/news/articles/cewrx0ldlkko-.
+[4] https://forensic-architecture.org/investigation/airstrikes-on-minab-.
+[5] https://news.un.org/en/story/2026/03/1167063.
+[6] https://www.bbc.com/audio/play/w3ct8mcc.
+[7] https://www.democracynow.org/2026/7/22/minab_forensic_architecture.
+[8] Lenin, V. L. (1917). Der Imperialismus als höchstes Stadium des Kapitalismus.
+1.3
+[1] https://youtu.be/meZMp3qxOGo?si=jB8w652G1WtyDLul.
+[2] https://apnews.com/article/russia-ukraine-war-drones-oil-depot mobilization-40c6a27b9f98876b913a4daee0403c2c.
+[3] https://monitoring.bbc.co.uk/product/b0002kls.
+[4] https://time.com/6965892/ukraine-military-mobilization-conscription-law/.
+[5] https://www.lemonde.fr/en/international/article/2024/03/31/why-is-ukraine-s-effort-to-mobilize-more-troops-facing-trouble_6666954_4.html.
+[6] https://news.sky.com/story/emotional-zelenskyy-opens-up-on-peace-sacrifice-and-family-in-exclusive-interview-13263437.
+[7] https://apnews.com/article/ukraine-elections-zelenskyy-trump-explainer-3162f3dfb74196801c45ae9060c02f03.
+[8] https://news.gallup.com/poll/711992/ukrainians-sour-washington-views-war-stabilize.aspx.
+[9] https://www.kiis.com.ua/?cat=reports&id=1597&lang=eng&page=1.
+[10] https://www.spiegel.de/ausland/ukraine-krieg-kyjiw-meldet-angriffe-auf-zwei-raffinerien-mehrere-tote-bei-russischen-attacken-a-6d0a098c-0637-41f0-873c-56ec236be656.
+[11] https://www.csis.org/analysis/assessing-russian-firepower-strikes-ukraine.
+[12] https://www.csis.org/analysis/geography-coercion-russian-missile-and-drone-campaigns-ukraine.
+[13] https://mvs.gov.ua/en/news/do-ukrayini-pribula-delegaciia-mvs-ispaniyi-pidpisano-implementaciinii-protokol-pro-readmisiiu-osib.
+[14] https://taz.de/-Nachrichten-im-Ukraine-Krieg-/!6202876/.
+1.4
+-
+1.5
+[1] Baroud, R. (2025, October 3). Meloni’s Gaza challenge: The people vs. Netanyahu’s cronies. ZNetwork. https://znetwork.org/znetarticle/melonis-gaza-challenge-the-people-vs-netanyahus-cronies/.
+[2] Deadline Staff. (2023, Juni 12). How Silvio Berlusconi reshaped the Italian media landscape & what comes next. Deadline. https://deadline.com/2023/06/silvio-berlusconi-how-he-reshaped-landscape-and-what-comes-next-1235414388/.
+[3] Herman, E. S., & Chomsky, N. (2021). Manufacturing consent. In Power and inequality (pp. 198-206). Routledge.
+[4] Moritz Pompl (2025, Oktober 3). Solidarität mit Gaza: Flottille, Italien im Generalstreik. Bayerischer Rundfunk. https://www.br.de/nachrichten/deutschland-welt/solidaritaet-mit-gaza-flotille-italien-im-generalstreik
+[5] Tondo, L., & Carrington, D. (2025, October 4). Israel accused of detaining Greta Thunberg in infested cell and making her hold flags. The Guardian. https://www.theguardian.com/world/2025/oct/04/greta-thunberg-israel-gaza-sweden.
+[6] News Agencies. (2025, October 6). Israel deports Greta Thunberg and other Gaza flotilla activists. Al Jazeera. https://www.aljazeera.com/news/2025/10/6/greta-thunberg-and-other-activists-deported-from-israel-arrive-in-greece.
+[7] Al Jazeera. (2025, 3. Oktober). Pressure mounts on Meloni’s gov’t as Gaza protests paralyse Italy. Abgerufen von https://www.aljazeera.com/news/2025/10/3/pressure-mounts-on-italian-govt-over-gaza-after-strike-paralyses-nation.
+[8] Tagesschau. (2025, Oktober 4). Mehr als 400 Aktivisten der Gaza-Flottille festgenommen. Abgerufen am 07.10.2025, von https://www.tagesschau.de/ausland/europa/nahost-gaza-flotille-100.html.
+[9] Tagesschau. (2025, Oktober 1). Israel stoppt Gaza-Flottille. Tagesschau. https://www.tagesschau.de/ausland/asien/israel-flotille-gaza-100.html.
+[10]  Tams, C. J. (2010). Der Goldstone-Bericht zum Gaza-Krieg 2008/2009 aus Sicht des Völkerrechts. VN Vereinte Nationen, 58(6), 243-248.
+[11] Falk, R. A. (2014, January 13). Report of the Special Rapporteur on the situation of human rights in the Palestinian territories occupied since 1967 (A/HRC/25/67). United Nations Human Rights Council. https://digitallibrary.un.org/record/774028.
+[12] "Prime Minister to UN Security Council: Israeli Treacherous Attack on Qatar Carried Out by Extremist Leadership Far Removed from Behavior of Civilized Countries That Believe in Peace". https://mofa.gov.qa/en/qatar/latest-articles/latest-news/details/2025/09/11/prime-minister-to-un-security-council--israeli-treacherous-attack-on-qatar-carried-out-by-extremist-leadership-far-removed-from-behavior-of-civilized-countries-that-believe-in-peace. _Qatari Ministry of Foreign Affairs_ (Government website). 11 September 2025. Retrieved 12 September 2025.
+[13] "Through Qatar attack, Israel again shows disregard for allies and peace negotiations". https://www.tbsnews.net/features/panorama/through-qatar-attack-israel-again-shows-disregard-allies-and-peace-negotiations. _The Business Standard_. 10 September 2025. Retrieved 12 September 2025.
+[14] Tagesschau.de. (2025, 10. September). _Empörung und Kritik nach Israels Angriff auf Hamas-Spitze in Katar_. https://www.tagesschau.de/ausland/asien/israel-angriff-hamas-katar-reaktionen-100.html.
+[15] Falk, R. (2025, 23. September). Assessing Israel’s Doha Attack on Hamas Negotiating High-Level Te. https://richardfalk.org/2025/09/26/assessing-israels-doha-attack-on-hamas-negotiating-high-level-team.
+[16] Dawn.com (2025. 9. September). International community slams Israel’s ‘cowardly’ Doha strikes as ‘flagrant violation’ of Qatari sovereignty. https://www.dawn.com/news/1940768.
+[17] Al Jazeera. (2025, 11. Oktober). _Israeli strikes kill at least one, injure several people in south Lebanon_, Video. Al Jazeera. https://www.aljazeera.com/video/newsfeed/2025/10/11/israeli-strikes-kill-at-least-one-injure-several-people-in-south-lebanon.
+[18] Spiegel Online. (2025, 11. Oktober). _Libanon: Israel intensiviert Angriffe trotz Waffenruhe in Gaza_. Der Spiegel. https://www.spiegel.de/ausland/libanon-israel-intensiviert-angriffe-trotzt-waffenruhe-in-gaza-a-9f472b7f-fcde-4dd3-bdf9-af5905453696.
+[19] Spiegel Online. (2025, 9. Oktober). Reaktionen in Israel und Gaza auf den Waffenstillstand: „Wir lieben Trump“ – Hoffnung und Zweifel nach dem Gaza-Deal. _Der Spiegel_. https://www.spiegel.de/ausland/reaktionen-in-israel-und-gaza-auf-den-waffenstillstand-wir-lieben-trump-hoffnung-und-zweifel-nach-dem-gaza-deal-a-bba98b9e-e7fe-4f4b-b62a-ba7f4b7cf592.
+[20] DeCamp, D. (2025, 6. Oktober). _Israel says no Gaza ceasefire in place despite Trump's call for a stop to the bombing_. ZNetwork. https://znetwork.org/znetarticle/israel-says-no-gaza-ceasefire-in-place-despite-trumps-call-for-a-stop-to-the-bombing/.
+[21] Associated Press. (2025, 5. Oktober). _Israel and Hamas prepare for negotiations on possible ceasefire_. AP News. https://apnews.com/article/israel-palestinians-hamas-war-news-10-05-2025-b86bbabb69da42a45afde1ae58a85047.
+[22] Médecins Sans Frontières. (2025, 5. Oktober). _MSF is devastated by the death of colleague Abed El Hameed in Gaza_. https://www.msf.org/msf-devastated-death-colleague-abed-el-hameed.
+[23] Handelsblatt. (2025, 19. August). _Gaza-Krieg: Hamas offen für Waffenruhe – jetzt muss Israel entscheiden_. Handelsblatt. https://www.handelsblatt.com/politik/international/gaza-krieg-hamas-offen-fuerwaffenruhe-jetzt-muss-israel-entscheiden/100149164.html.
+[24] Hussein, M. A., & Haddad, M. (2025, 17. April). _A nation behind bars: Why has Israel imprisoned 10,000 Palestinians?_ Al Jazeera. https://www.aljazeera.com/news/2025/4/17/a-nation-behind-bars-why-has-israel-imprisoned-10000-palestinians.
+[25] Nashed, M. (2024, 17. April). _The thousands of Palestinians Israel arrests, tortures, holds even in death_. Al Jazeera. https://www.aljazeera.com/news/2024/4/17/the-thousands-of-palestinians-israel-arrests-tortures-hold-even-in-death/.
+[26] EastPost. (2025, September). _Trump’s Gaza peace plan: Colonial blueprint with dressing_. EastPost. https://www.eastpost.in/global-south/gs-mea/2025/09/trumps-gaza-peace-plan-colonial-blueprint-with-dressing/.
+[27] BBC. (2025, 9. Oktober). Trump's 20-point Gaza peace plan in full. BBC. https://www.bbc.com/news/articles/c70155nked7o.
+[28] Al Jazeera. (2026, 21. Januar). Israel demolishes three Palestinian homes in occupied West Bank [Video]. Al Jazeera. Israel demolishes three Palestinian homes in occupied West Bank.
+[29] IMEMC News. (2026, 21. Januar). Soldiers demolish four-story home in Shuqba. IMEMC. https://imemc.org/article/soldiers-demolish-four-story-home-in-shuqba/.
+[30] Al Jazeera. (2026, 22. Januar). Israeli minister approves gun licences for 18 illegal West Bank settlements. Al Jazeera.
+[31] https://www.aljazeera.com/news/2026/1/26/yellow-line-the-de-facto-israeli-buffer-zone-shaping-life-in-gaza.
+[32] https://www.bbc.com/news/articles/ckgxl6zkenqo.
+[33] Lob, E., Mirzaei, D., & Talebian, H. (2025). Iran in the aftermath of the Twelve-Day War (GIGA Focus Nahost, Nr. 5). Hamburg: German Institute for Global and Area Studies (GIGA). https://doi.org/10.57671/gfme-25052.
+[34] https://www.washingtoninstitute.org/policy-analysis/hamas-accepts-gaza-roadmap-political-breakthrough-implementation-uncertainty.
+1.6
+[1] https://www.tagesschau.de/ausland/asien/militaerpakt-tuerkei-saudi-arabien-pakistan-100.html.
+[2] https://www.aljazeera.com/news/2026/8/7/turkiye-saudi-arabi-pakistan-sign-joint-defence-agreement-whats-in-it.
+[3] https://www.cfr.org/articles/pakistan-saudi-arabia-defense-pact.
+1.7
+[1] https://news.un.org/en/story/2026/08/1168101.
+[2] https://www.aljazeera.com/news/2026/8/8/sudans-war-threatens-an-entire-generations-future-un-warns.
+1.8
+[1] https://www.cfr.org/global-conflict-tracker/conflict/civil-war-south-sudan.
+[2] https://unmiss.unmissions.org/en/unmiss-background.
+[3] https://www.reuters.com/legal/government/us-judge-allows-deportation-protections-end-south-sudanese-2026-08-07.
+2.1
+[1] https://archive.is/20260808171524/https://www.spiegel.de/wirtschaft/yuval-noah-harari-ueber-kuenstliche-intelligenz-wie-berechnet-man-die-kosten-der-ausloeschung-a-83855f57-6085-41f2-829a-8191eae6c2f5.
+[2] https://www.dup-magazin.de/technologie/big-data/yuval-noah-harari-bedeutet-ki-das-ende-der-menschheitsgeschichte.
+2.2
+[1] https://archive.is/20260806140935/https://www.spiegel.de/wirtschaft/kuenstliche-intelligenz-killt-ki-den-kapitalismus-a-56ab0493-30a5-45e2-a2fc-226357d1de60#selection-645.0-645.17.
+2.3
+[1] https://www.youtube.com/watch?v=YMBWlz0UkXc-.
+[2] https://www.ndr.de/nachrichten/hamburg/tschentscher-kritisiert-steuerpolitik-der-bundesregierung,tschentscher-210.html.
+
+    <script>
+        function enterSite() {
+            document.getElementById('splash-screen').classList.add('hidden');
+        }
+
+        function openModal(id) {
+            document.getElementById(id).style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+    </script>
+</body>
+</html>
